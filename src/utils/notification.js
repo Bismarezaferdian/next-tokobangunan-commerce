@@ -28,7 +28,7 @@ export const errorMessage = (message) => {
   });
 };
 
-export const infoMessage = (message) => {
+export const infoMessage = (message, onClose) => {
   // window.alert("Invalid Credentials");
   toast.info(message, {
     position: "top-right",
@@ -39,5 +39,6 @@ export const infoMessage = (message) => {
     draggable: true,
     progress: undefined,
     theme: "colored",
+    onClose: onClose,
   });
 };

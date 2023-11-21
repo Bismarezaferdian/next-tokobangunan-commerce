@@ -2,11 +2,8 @@
 import React, { useState } from "react";
 import useSWR from "swr";
 import Image from "next/image";
-import Link from "next/link";
-import { parseCookies } from "nookies";
-import { useRouter } from "next/navigation";
-import { errorMessage } from "@/utils/notification";
 import { ToastContainer, toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const fetcher = (url) =>
   fetch(url, {
@@ -19,7 +16,6 @@ const AllProduct = ({ brand, category }) => {
   const router = useRouter();
   const [brandFilter, setBrandFilter] = useState([]);
   const [categoryFilter, setCategoryFilter] = useState([]);
-  const { token } = parseCookies();
 
   const queryBrand = brandFilter.map(
     (brand) => `filters[brands][title][$contains]=${brand}`
@@ -55,19 +51,7 @@ const AllProduct = ({ brand, category }) => {
   };
 
   const handleToProduct = (id) => {
-    if (token) {
-      router.push(`/products/${id}`);
-    } else {
-      toast("Toast is good", {
-        hideProgressBar: true,
-        autoClose: 2000,
-        type: "warning",
-      });
-      //fungsi pada onClose tidak berfungsi
-      setTimeout(() => {
-        router.push("/auth/login");
-      }, 3000);
-    }
+    router.push(`/products/${id}`);
   };
 
   return (
@@ -190,7 +174,10 @@ const AllProduct = ({ brand, category }) => {
                   className="object-cover"
                 />
               </div>
-              <div className="" onClick={() => handleToProduct(item.id)}>
+              <div
+                className="cursor-pointer"
+                onClick={() => handleToProduct(item.id)}
+              >
                 {/* <Link href={`/products/${item.id}`}> */}
                 <h1 className="text-sm font-semibold">
                   {item.attributes.title.length > 20

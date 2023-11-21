@@ -1,14 +1,49 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ShoppingCartIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
-import { Elsie_Swash_Caps } from "next/font/google";
+import useProductStore, { combineStore } from "@/utils/zustand/store";
+import { ToastContainer } from "react-toastify";
+import { errorMessage } from "@/utils/notification";
+import { parseCookies } from "nookies";
+import { useRouter } from "next/navigation";
 
 const SingleProduct = ({ product }) => {
-  const [dataProduct, setDataProduct] = useState();
+  const { user } = combineStore();
+  console.log(user);
+  const addToCart = combineStore((state) => state.addToCart);
+  const [dataProduct, setDataProduct] = useState(product.data);
   const [qty, setQty] = useState(1);
+  const { token } = parseCookies();
+  const router = useRouter();
 
-  const handleAddCart = () => {};
+  const handleAddCart = (e) => {
+    //post data in cart where id ...
+    //post data in zustand
+    e.preventDefault();
+    const data = { id: dataProduct.id, ...dataProduct.attributes, qty };
+    if (token) {
+      addToCart(data);
+    } else {
+      // toast("Toast is good", {
+      //   hideProgressBar: true,
+      //   autoClose: 2000,
+      //   type: "warning",
+      // });
+      errorMessage("anda belum login,silahkan login ! ");
+      //fungsi pada onClose tidak berfungsi
+      setTimeout(() => {
+        router.push("/auth/login");
+      }, 3000);
+    }
+  };
+  // addToCart(qty);
+
+  useEffect(() => {
+    combineStore.persist.rehydrate();
+  }, []);
+
+  // console.log(data);
 
   const handleQty = (type) => {
     setQty((prevQty) => {
@@ -21,8 +56,10 @@ const SingleProduct = ({ product }) => {
       }
     });
   };
+
   return (
     <>
+      <ToastContainer />
       <div className=" flex flex-1  justify-center h-auto ">
         <Image
           src={
@@ -66,7 +103,10 @@ const SingleProduct = ({ product }) => {
             +
           </button>
         </div>
-        <button className="flex bg-green-700 w-fit px-4 py-4 rounded-md text-sm text-slate-50 items-center justify-center">
+        <button
+          className="flex bg-green-700 w-fit px-4 py-4 rounded-md text-sm text-slate-50 items-center justify-center"
+          onClick={(e) => handleAddCart(e)}
+        >
           <ShoppingCartIcon className="h-6 w-6 font-bold  text-slate-50" />
           Masukan keranjang
         </button>
@@ -76,3 +116,25 @@ const SingleProduct = ({ product }) => {
 };
 
 export default SingleProduct;
+// const productInState = products.find(
+//   (product) => product.id === item.id
+// );
+
+// //jika sudah ada , update qty dan price
+// if (productInState) {
+//   const updateState = console.log(true);
+//   set((state) => ({
+//     products: [...state.products],
+//     qty: state.qty + item.qty,
+//     totalPrice: state.totalPrice + item.qty * item.price,
+//     weight: state.weight + item.weight,
+//   }));
+// } else {
+//   console.log(true);
+//   set((state) => ({
+//     products: [...state.products, item],
+//     qty: state.qty + item.qty,
+//     weight: state.weight + item.weight,
+//     totalPrice: state.totalPrice + item.qty * item.price,
+//   }));
+// }

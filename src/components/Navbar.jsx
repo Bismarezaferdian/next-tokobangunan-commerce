@@ -1,11 +1,11 @@
 import {
   Bars3Icon,
   MagnifyingGlassIcon,
-  ShoppingCartIcon,
   UserIcon,
 } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import React from "react";
+import CartIcon from "./CartIcon";
 
 const Navbar = () => {
   const user = true;
@@ -40,7 +40,7 @@ const Navbar = () => {
           </button>
         </div>
         <div className="flex gap-5">
-          <ShoppingCartIcon className="h-6 w-6 font-bold text-gray-800" />
+          <CartIcon />
           <Bars3Icon className="h-6 w-6 text-black sm:hidden" />
           {user && <UserIcon className="h-6 w-6 text-black" />}
         </div>
