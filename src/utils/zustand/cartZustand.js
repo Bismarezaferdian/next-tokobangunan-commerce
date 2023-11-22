@@ -60,18 +60,18 @@
 
 // export default useCartStore;
 
-import { successMessage } from "../notification";
+import { errorMessage, successMessage } from "../notification";
 
 const useCartStore = (set, get) => ({
+  cartID: null,
   products: [],
   qty: 0,
   weight: 0,
   totalPrice: 0,
 
-  addToCart: (item) => {
+  addToCart: async (item) => {
     const products = get().products;
-    // console.log(products);
-    // console.log(item);
+
     //apakah product baru sudah ada di dalam keranjang
     const productInCart = products.find((product) => product.id === item.id);
 
@@ -92,6 +92,7 @@ const useCartStore = (set, get) => ({
         weight: state.weight + item.weight * item.qty,
         totalPrice: state.totalPrice + item.price * item.qty,
       }));
+
       // successMessage("product dimasukan keranjang !");
     } else {
       set((state) => ({
@@ -101,14 +102,49 @@ const useCartStore = (set, get) => ({
         totalPrice: state.totalPrice + item.price * item.qty,
       }));
     }
-    successMessage("product dimasukan keranjang !");
 
+    const data = {
+      data: {
+        products: get().products,
+        qty: get().qty,
+        weight: get().weight,
+        totalPrice: get().totalPrice,
+      },
+    };
+
+    console.log(data);
+
+    const cartid = get().cartID;
+
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/carts/${cartid}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+
+    if (res.ok) {
+      successMessage("product dimasukan keranjang !");
+    } else {
+      errorMessage("product tidak bisa dimasukan keranjang !");
+    }
     // set((state) => ({ products: [], qty: 0, weight: 0, totalPrice: 0 }));
   },
+
+  updateCart: (item) => {
+    console.log(item[0].id);
+    set((state) => ({
+      cartID: item[0].id,
+      products: item[0].attributes.products,
+      qty: item[0].attributes.qty,
+      weight: item[0].attributes.weight,
+      totalPrice: item[0].attributes.totalPrice,
+    }));
+  },
 });
-// {
-//   name: "product", // Specify a name for persistence
-//   skipHydration: true,
-// }
 
 export default useCartStore;

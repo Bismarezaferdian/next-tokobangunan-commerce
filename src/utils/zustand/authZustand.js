@@ -1,7 +1,7 @@
 const useAuthStore = (set, get) => ({
   user: {},
 
-  login: (item) => {
+  login: async (item) => {
     set((state) => ({
       user: { ...state.user, ...item },
     }));

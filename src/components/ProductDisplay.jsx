@@ -19,7 +19,7 @@ const getData = async () => {
 
 const ProductDisplay = async () => {
   const datas = await getData();
-  console.log(datas);
+  // console.log(datas);
 
   return (
     <div>

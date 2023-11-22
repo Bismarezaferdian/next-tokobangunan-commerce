@@ -1,5 +1,5 @@
 "use client";
-import { successMessage } from "@/utils/notification";
+import { errorMessage, successMessage } from "@/utils/notification";
 import { combineStore } from "@/utils/zustand/store";
 import { redirect, useRouter } from "next/navigation";
 import { parseCookies, setCookie } from "nookies";
@@ -8,7 +8,7 @@ import { ToastContainer } from "react-toastify";
 
 function Login() {
   const router = useRouter();
-  const { login, logout } = combineStore();
+  const { login, logout, updateCart } = combineStore();
   const [data, setData] = useState({});
   const { token } = parseCookies();
 
@@ -36,17 +36,28 @@ function Login() {
       },
       body: JSON.stringify(data),
     });
-
     const response = await res.json();
+    //update cookies
     if (res.ok) {
       setCookie(null, "token", response.jwt, {
         path: "/",
       });
+      //update state auth
       login(response.user);
+      //get data cart
+      const res2 = await fetch(
+        `http://localhost:1337/api/carts?populate=*&filters[users_permissions_users][id][$eq]=${response.user.id}`
+      );
+      const dataCart = await res2.json();
+      if (dataCart.data.length === 0) {
+        console.log("tidak punya cart");
+      }
+      console.log();
+      //update cart
+      // updateCart(dataCart.data);
       successMessage("success login");
     } else {
-      console.log("something went wrong !");
-      console.log(response.error.message);
+      errorMessage(response.error.message);
     }
   };
 
@@ -54,7 +65,6 @@ function Login() {
     logout();
   };
 
-  // console.log(data);
   return (
     <>
       <ToastContainer />

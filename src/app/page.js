@@ -8,9 +8,24 @@ import Category from "@/components/Category";
 import About from "@/components/About";
 import { parseCookies } from "nookies";
 
-export default function Home() {
-  const token = parseCookies();
-  console.log(token);
+const getDataCart = async (userID) => {
+  const res = await fetch(
+    `http://localhost:1337/api/carts?populate=*&filters[users_permissions_users][id][$eq]=${userID}`,
+    {
+      cache: "no-store",
+      // headers: {
+      //   Authorization: "bearer " + process.env.NEXT_PUBLIC_API_TOKEN,
+      // },
+    }
+  );
+  if (!res.ok) {
+    throw new Error("Failed!");
+  }
+
+  return res.json();
+};
+
+export default async function Home() {
   return (
     <div className="container mx-auto overflow-hidden">
       <Image src={Mega} alt="toko" priority={true} />

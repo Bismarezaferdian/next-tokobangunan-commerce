@@ -10,26 +10,27 @@ import { useRouter } from "next/navigation";
 
 const SingleProduct = ({ product }) => {
   const { user } = combineStore();
-  console.log(user);
+  const { token } = parseCookies();
+  // console.log(user);
+
   const addToCart = combineStore((state) => state.addToCart);
   const [dataProduct, setDataProduct] = useState(product.data);
   const [qty, setQty] = useState(1);
-  const { token } = parseCookies();
+
   const router = useRouter();
 
   const handleAddCart = (e) => {
     //post data in cart where id ...
     //post data in zustand
     e.preventDefault();
-    const data = { id: dataProduct.id, ...dataProduct.attributes, qty };
+
+    const data = { ...dataProduct.attributes, qty, id: dataProduct.id };
+    console.log(data);
+
+    // console.log(data);
     if (token) {
       addToCart(data);
     } else {
-      // toast("Toast is good", {
-      //   hideProgressBar: true,
-      //   autoClose: 2000,
-      //   type: "warning",
-      // });
       errorMessage("anda belum login,silahkan login ! ");
       //fungsi pada onClose tidak berfungsi
       setTimeout(() => {
