@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useSWR from "swr";
 import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
@@ -16,6 +16,7 @@ const AllProduct = ({ brand, category }) => {
   const router = useRouter();
   const [brandFilter, setBrandFilter] = useState([]);
   const [categoryFilter, setCategoryFilter] = useState([]);
+  const [product, setProduct] = useState([]);
 
   const queryBrand = brandFilter.map(
     (brand) => `filters[brands][title][$contains]=${brand}`
@@ -25,12 +26,30 @@ const AllProduct = ({ brand, category }) => {
     (cat) => `filters[categories][title][$contains]=${cat}`
   );
 
-  const { data, error, isLoading } = useSWR(
+  // const {
+  //   data: products,
+  //   error,
+  //   isLoading,
+  // } = useSWR(`${process.env.NEXT_PUBLIC_API_PRODUCT}/products}`, fetcher);
+  const {
+    data: products,
+    error,
+    isLoading,
+  } = useSWR(
     `${process.env.NEXT_PUBLIC_API_PRODUCT}&${queryBrand.join(
       "&"
     )}&${queryCategory.join("&")}`,
     fetcher
   );
+
+  console.log(products);
+
+  // useEffect(() => {
+  //   setProduct(products);
+  // }, [product]);
+
+  // const datas = data;
+  // console.log(products);
 
   const handleBrand = (e) => {
     if (brandFilter.includes(e.target.value)) {
@@ -154,13 +173,15 @@ const AllProduct = ({ brand, category }) => {
         </div>
 
         {/* product */}
-
+        {isLoading && <h1>loading ....</h1>}
+        {error && <h1>something went wrong !!!</h1>}
         <div className="grid grid-cols-4  md:grid-cols-6 md:col-span-4 gap-4 w-full h-fit overflow-hidden ">
-          {data?.data.map((item) => (
+          {products?.data.map((item) => (
             <div
-              className="card ovenpmrflow-hidden  flex flex-col items-center"
+              className="card overflow-hidden  flex flex-col items-center"
               key={item.id}
             >
+              <h1>{isLoading}</h1>
               <div className="">
                 <Image
                   src={
@@ -178,13 +199,12 @@ const AllProduct = ({ brand, category }) => {
                 className="cursor-pointer"
                 onClick={() => handleToProduct(item.id)}
               >
-                {/* <Link href={`/products/${item.id}`}> */}
                 <h1 className="text-sm font-semibold">
                   {item.attributes.title.length > 20
                     ? item.attributes.title.substring(0, 20) + "..."
                     : item.attributes.title}
                 </h1>
-                {/* </Link> */}
+
                 <h1 className="text-sm font-light">
                   Rp.{item.attributes.price}
                 </h1>

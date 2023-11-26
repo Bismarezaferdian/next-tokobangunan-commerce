@@ -19,15 +19,20 @@ const SingleProduct = ({ product }) => {
 
   const router = useRouter();
 
+  console.log(user.id);
+
   const handleAddCart = (e) => {
     //post data in cart where id ...
     //post data in zustand
     e.preventDefault();
 
-    const data = { ...dataProduct.attributes, qty, id: dataProduct.id };
-    console.log(data);
+    const data = {
+      ...dataProduct.attributes,
+      qty,
+      id: dataProduct.id,
+      userID: user.id,
+    };
 
-    // console.log(data);
     if (token) {
       addToCart(data);
     } else {
@@ -83,6 +88,14 @@ const SingleProduct = ({ product }) => {
           {" "}
           Rp.{product.data.attributes.price}
         </h1>
+        <p
+          className={`text-sm text-slate-500 ${
+            product.data.attributes.stock <= 1 ? "bg-red-200" : "bg-green-200"
+          } bg-green-200 w-fit px-2 rounded-md`}
+        >
+          {" "}
+          stock:{product.data.attributes.stock}{" "}
+        </p>
         <br />
         <span>Description:</span>
         <p className="text-sm font-extralight text-slate-700 ">

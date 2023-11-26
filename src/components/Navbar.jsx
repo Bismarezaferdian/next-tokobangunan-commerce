@@ -6,11 +6,12 @@ import {
 import Link from "next/link";
 import React from "react";
 import CartIcon from "./CartIcon";
+import Image from "next/image";
 
 const Navbar = () => {
   const user = true;
   return (
-    <div className="flex flex-1 container mx-auto px-3 h-14 md:h-16 items-center gap-4 justify-between ">
+    <div className="flex flex-1 container mx-auto px-3 h-14 md:h-16 items-center gap-4 w-screen overflow-hidden justify-between ">
       <div className="">
         <h1 className="font-bold text-red-600">Mega Utama</h1>
       </div>

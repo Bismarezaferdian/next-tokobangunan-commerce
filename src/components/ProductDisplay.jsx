@@ -27,7 +27,7 @@ const ProductDisplay = async () => {
         <div className="flex justify-between items-center ">
           <h1 className="font-semibold flex justify-start text-lg ">Product</h1>
           <button className="">
-            <Link href="/">lihat semua</Link>
+            <Link href="/products">lihat semua</Link>
           </button>
         </div>
         <ProductSlider data={datas} />

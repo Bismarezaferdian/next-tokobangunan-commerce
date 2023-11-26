@@ -49,12 +49,13 @@ function Login() {
         `http://localhost:1337/api/carts?populate=*&filters[users_permissions_users][id][$eq]=${response.user.id}`
       );
       const dataCart = await res2.json();
-      if (dataCart.data.length === 0) {
+      if (dataCart.data.length > 0) {
+        console.log("ada cart");
+        //update cart
+        updateCart(dataCart.data);
+      } else {
         console.log("tidak punya cart");
       }
-      console.log();
-      //update cart
-      // updateCart(dataCart.data);
       successMessage("success login");
     } else {
       errorMessage(response.error.message);

@@ -15,10 +15,10 @@
 }
 @layer components {
   .btn-primary {
-    @apply text-white bg-blue-800 px-2 rounded-md;
+    @apply text-white bg-blue-800 px-2 rounded-md cursor-pointer;
   }
 
   .medium {
-    @apply max-w-xs w-36 h-9 px-6 whitespace-nowrap text-sm;
+    @apply max-w-xs w-36 h-9 px-6 whitespace-nowrap text-center items-center cursor-pointer transition-all hover:bg-blue-600 disabled:bg-blue-400 text-blue-50;
   }
 }

@@ -1,3 +1,5 @@
+import CartPage from "@/components/CartPage";
+import Image from "next/image";
 import React from "react";
 
 const Cart = () => {
@@ -11,15 +13,7 @@ const Cart = () => {
         test Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ullam
         exercitationem dolor vero.
       </div> */}
-      <div className="w-full border-b-2">
-        <div className="card "> item</div>
-      </div>
-      <div className="w-full border-b-2">
-        <div className="card "> item</div>
-      </div>
-      <div className="w-full border-b-2">
-        <div className="card "> item</div>
-      </div>
+      <CartPage />
     </div>
   );
 };
