@@ -4,7 +4,7 @@ export const successMessage = (message, onClose) => {
   // window.alert("Invalid Credentials");
   toast.success(message, {
     position: "top-right",
-    autoClose: 2000,
+    autoClose: 1000,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: false,

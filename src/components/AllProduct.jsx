@@ -25,6 +25,7 @@ const AllProduct = ({ brand, category }) => {
   const queryCategory = categoryFilter.map(
     (cat) => `filters[categories][title][$contains]=${cat}`
   );
+  console.log("reaload products page");
 
   // const {
   //   data: products,
@@ -41,8 +42,6 @@ const AllProduct = ({ brand, category }) => {
     )}&${queryCategory.join("&")}`,
     fetcher
   );
-
-  console.log(products);
 
   // useEffect(() => {
   //   setProduct(products);

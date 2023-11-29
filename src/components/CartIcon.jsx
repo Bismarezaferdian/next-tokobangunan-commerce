@@ -12,33 +12,9 @@ function CartIcon() {
   const [isLogout, setIsLogout] = useState(false);
   const { qty } = combineStore();
 
-  //   useEffect(() => {
-  //     if (token) {
-  //       console.log("ada cart");
-  //     } else {
-  //       console.log("tidak ada cart");
-  //     }
-  //   }, [token]);
-
   useEffect(() => {
     combineStore.persist.rehydrate();
   }, []);
-
-  useEffect(() => {
-    if (isLogout) {
-      localStorage.removeItem("store");
-      destroyCookie(null, "token", {
-        path: "/",
-      });
-      router.push("/auth/login");
-    }
-  }, [isLogout]);
-
-  const handleLogout = (e) => {
-    e.preventDefault();
-    setIsLogout(true);
-    // combineStore.persist.clearStorage();
-  };
 
   return (
     <div>
@@ -48,12 +24,12 @@ function CartIcon() {
           {qty}
         </div>
       </Link>
-      <button
+      {/* <button
         onClick={(e) => handleLogout(e)}
         className="bg-blue-600 text-zinc-100 rounded-md p-1"
       >
         logout
-      </button>
+      </button> */}
     </div>
   );
 }

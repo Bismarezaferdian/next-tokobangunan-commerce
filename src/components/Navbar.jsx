@@ -6,10 +6,9 @@ import {
 import Link from "next/link";
 import React from "react";
 import CartIcon from "./CartIcon";
-import Image from "next/image";
+import UserInfo from "./UserInfo";
 
 const Navbar = () => {
-  const user = true;
   return (
     <div className="flex flex-1 container mx-auto px-3 h-14 md:h-16 items-center gap-4 w-screen overflow-hidden justify-between ">
       <div className="">
@@ -43,7 +42,8 @@ const Navbar = () => {
         <div className="flex gap-5">
           <CartIcon />
           <Bars3Icon className="h-6 w-6 text-black sm:hidden" />
-          {user && <UserIcon className="h-6 w-6 text-black" />}
+          {/* {user && <UserIcon className="h-6 w-6 text-black" />} */}
+          <UserInfo />
         </div>
       </div>
     </div>

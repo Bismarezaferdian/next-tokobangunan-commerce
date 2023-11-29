@@ -111,6 +111,53 @@ const useCartStore = (set, get) => ({
       totalPrice: item[0].attributes.totalPrice,
     }));
   },
+
+  deleteCart: async (item) => {
+    //get pproduct in state
+    const products = get().products;
+    //get product after delete
+    const deleteProduct = products.filter((cart) => cart.id !== item.id);
+    //update state
+    set((state) => ({
+      products: deleteProduct,
+      qty: state.qty - 1,
+      weight: state.weight - item.weight,
+      totalPrice: state.totalPrice - item.price,
+    }));
+    //update in database
+    const data = {
+      data: {
+        products: get().products,
+        qty: get().qty,
+        weight: get().weight,
+        totalPrice: get().totalPrice,
+        users_permissions_users: item.userID,
+      },
+    };
+
+    const cartid = get().cartID;
+    if (cartid !== null) {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/carts/${cartid}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      //handle jika put database berhasil/tidak
+      if (res.ok) {
+        successMessage("product telah dihapus");
+      } else {
+        errorMessage("product tidak bisa dihapus !");
+      }
+    } else {
+      errorMessage("user tidak ada ");
+    }
+  },
 });
 
 export default useCartStore;
