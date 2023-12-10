@@ -19,8 +19,6 @@ const SingleProduct = ({ product }) => {
 
   const router = useRouter();
 
-  console.log(user.id);
-
   const handleAddCart = (e) => {
     //post data in cart where id ...
     //post data in zustand
@@ -29,6 +27,7 @@ const SingleProduct = ({ product }) => {
     const data = {
       ...dataProduct.attributes,
       qty,
+      price: dataProduct.attributes.price * qty,
       id: dataProduct.id,
       userID: user.id,
     };

@@ -1,6 +1,8 @@
 "use client";
 import { combineStore } from "@/utils/zustand/store";
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import useSWR from "swr";
@@ -9,6 +11,7 @@ const fecher = ([url, param]) =>
   fetch(`${url}${param}`).then((res) => res.json());
 
 function CartPage() {
+  const router = useRouter();
   const { products, qty, weight, totalPrice, user, updateCart, deleteCart } =
     combineStore();
   const param = `?populate=*&filters[users_permissions_users][id][$eq]=${user.id}`;
@@ -34,6 +37,14 @@ function CartPage() {
   useEffect(() => {
     combineStore.persist.rehydrate();
   }, []);
+
+  const handleCheckout = (e) => {
+    e.preventDefault();
+    router.push({
+      pathname: "/order",
+      query: { pid: "test" },
+    });
+  };
 
   return (
     <div className="px-4">
@@ -94,12 +105,20 @@ function CartPage() {
           {" "}
           total Price :<span className="font-semibold">{totalPrice}</span>
         </div>
-        <button
-          disabled={qty === 0}
-          className="btn-primary medium flex w-fit mt-2"
+        <Link
+          href={{
+            pathname: "/order",
+            query: { qty: qty, weight: weight, totalPrice: totalPrice },
+          }}
         >
-          Checkout now
-        </button>
+          <button
+            // onClick={handleCheckout}
+            disabled={qty === 0}
+            className="btn-primary medium flex w-fit mt-2"
+          >
+            Checkout now
+          </button>
+        </Link>
         <span className="text-red-600 italic text-sm">
           free delivery by courir toko (s&k berlaku)
         </span>

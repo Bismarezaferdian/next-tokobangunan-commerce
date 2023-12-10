@@ -19,19 +19,19 @@ const useCartStore = (set, get) => ({
       const updateState = products.map((product) =>
         product.id === item.id
           ? {
-              ...item,
+              ...product,
               //update qty and price in products
               qty: product.qty + item.qty,
-              price: product.price + item.price * item.qty,
+              price: product.price + item.price,
             }
-          : item
+          : product
       );
       set((state) => ({
         //update initial state
         products: updateState,
         // qty: state.qty + item.qty,
         weight: state.weight + item.weight * item.qty,
-        totalPrice: state.totalPrice + item.price * item.qty,
+        totalPrice: state.totalPrice + item.price,
       }));
       // successMessage("product dimasukan keranjang !");
     } else {
@@ -40,7 +40,7 @@ const useCartStore = (set, get) => ({
         products: [...state.products, item],
         qty: state.qty + 1,
         weight: state.weight + item.weight * item.qty,
-        totalPrice: state.totalPrice + item.price * item.qty,
+        totalPrice: state.totalPrice + item.price,
       }));
     }
     //UPDATE DI DATABASE
@@ -121,7 +121,7 @@ const useCartStore = (set, get) => ({
     set((state) => ({
       products: deleteProduct,
       qty: state.qty - 1,
-      weight: state.weight - item.weight,
+      weight: state.weight - item.weight * item.qty,
       totalPrice: state.totalPrice - item.price,
     }));
     //update in database
