@@ -2,30 +2,53 @@
 import Shipping from "@/components/shipping";
 import { formatRupiah } from "@/utils/formatMatauang";
 import { combineStore } from "@/utils/zustand/store";
-import { DocumentDuplicateIcon } from "@heroicons/react/24/solid";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
-function Order({ searchParams }) {
-  const [expedisi, setExpedisi] = useState("toko");
-
-  // const router = useRouter();
-  // const data = router.query;
-  const { products, qty, weight, totalPrice, user, updateCart, deleteCart } =
-    combineStore();
+function Order() {
+  const { products, qty, weight, totalPrice, user } = combineStore();
+  const [expedisi, setExpedisi] = useState(null);
+  const [cost, setCost] = useState();
+  const [dataOrder, setDataOrder] = useState({
+    totalHarga: 0,
+    jenisPembayaran: "",
+    bank: "",
+    products: products,
+  });
 
   useEffect(() => {
     combineStore.persist.rehydrate();
   }, []);
   //sementara
-  const ongkosKirim = 100000;
+  useEffect(() => {
+    if (
+      (totalPrice !== undefined && cost !== null && cost) ||
+      cost?.cost[0]?.value !== undefined
+    ) {
+      setDataOrder((prev) => ({
+        ...prev,
+        totalHarga: totalPrice + (cost?.toko || cost?.expedisi?.cost[0]?.value),
+      }));
+    }
+  }, [totalPrice, cost]);
 
-  const totalHarga = totalPrice + ongkosKirim;
+  console.log(dataOrder);
 
   const handleSelect = (e) => {
-    // console.log(e.target.value);
+    if (e.target.value === "toko") {
+      setCost((prev) => ({
+        ...prev,
+        [e.target.name]: 100000,
+      }));
+    }
     setExpedisi(e.target.value);
+  };
+  console.log(dataOrder.jenisPembayaran);
+
+  const handleDataOrder = (e) => {
+    setDataOrder((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
 
   return (
@@ -86,19 +109,74 @@ function Order({ searchParams }) {
               Pilih Pengiriman
             </label>
             <select
-              onChange={(e) => handleSelect(e)}
-              id="countries"
+              onChange={handleSelect}
+              id="toko"
+              name="toko"
               className="bg-slate-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
             >
               <option value={""}>jenis pengiriman</option>
               <option value="toko">pengiriman toko</option>
               <option value="expedisi">pengiriman expedisi</option>
             </select>
+            {expedisi === "toko" && (
+              <span className="font-light italic text-xs text-red-600">
+                Max jarak 10 km dari toko, dikirim hari yang sama
+              </span>
+            )}
           </div>
 
-          {expedisi === "expedisi" && <Shipping weight={weight} />}
+          {expedisi === "expedisi" && (
+            <Shipping weight={weight} setCost={setCost} cost={cost} />
+          )}
+        </div>
+        <div className="daftar-bank w-full h-fit">
+          <div className="bg-slate-50 p-4">
+            <h1 className=" text-sm font-semibold">pembayaran</h1>
+            <label
+              htmlFor="countries"
+              className="block mb-2 text-sm font-medium text-gray-900 "
+            >
+              Pilih metode pembayaran
+            </label>
+            <select
+              onChange={handleDataOrder}
+              id="jenisPembayaran"
+              name="jenisPembayaran"
+              className="bg-slate-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+            >
+              <option value={""}>jenis pembayaran</option>
+              <option value="bank">Transfer bank manual</option>
+              <option value="VA">Virtual account</option>
+            </select>
+            {dataOrder?.JenisPembayaran === "VA" && (
+              <span className="font-light italic text-xs text-red-600">
+                maaf jenis pembayaran ini belum tersedia sekarang
+              </span>
+            )}
+            {dataOrder?.jenisPembayaran === "bank" && (
+              <div className="py-4">
+                <label
+                  htmlFor="bank"
+                  className="block mb-2 text-sm font-medium text-gray-900 "
+                >
+                  Pilih Bank
+                </label>
+                <select
+                  onChange={handleDataOrder}
+                  id="bank"
+                  name="courier"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                >
+                  <option value="">-Pilih Bank-</option>
+                  <option value="bca-123456789">Bank BCA</option>
+                  <option value="mandiri-1234556">Bank MANDIRI</option>
+                  <option value="bri-1234455">Bank BRI</option>
+                </select>
+              </div>
+            )}
+          </div>
 
-          <div className="alamat bg-slate-50 p-4 ">
+          <div className="alamat bg-slate-50 p-4 mt-4">
             <h1 className=" text-sm font-semibold ">Total Harga</h1>
             <div className="flex justify-between">
               <p className="text-sm  text-slate-600">
@@ -121,55 +199,24 @@ function Order({ searchParams }) {
                 <span className="font-light italic">( {weight}kg):</span>
               </p>
 
-              <p className="text-sm font-semibold">{formatRupiah(100000)}</p>
+              <p className="text-sm font-semibold">
+                {cost?.expedisi !== undefined
+                  ? formatRupiah(cost?.expedisi.cost[0]?.value)
+                  : formatRupiah(cost?.toko)}
+                {/* {cost !== null ? formatRupiah(cost.cost[0].value) : 0} */}
+              </p>
             </div>
             <div className="flex justify-between">
               <p className="text-sm font-semibold text-slate-600">
                 Total harga:{" "}
               </p>
               <p className="text-sm font-semibold">
-                {formatRupiah(totalHarga)}
+                {formatRupiah(dataOrder?.totalHarga)}
               </p>
             </div>
           </div>
-        </div>
-        <div className="daftar-bank bg-slate-50 py-4 w-full h-fit">
-          <h1 className="text-sm text-slate-600">
-            pilih pembayaran bank transfer
-          </h1>
-          <div className="bank">
-            <div className="">
-              <Image
-                src={
-                  "https://res.cloudinary.com/websitemuid/image/upload/c_crop,w_600,h_200/v1682582746/bca_lmqygl.png"
-                }
-                alt="bca"
-                width={100}
-                height={100}
-                // className="bg-red-300"
-              />
-            </div>
-            <p className="flex items-center">
-              no.rek: 2838484{" "}
-              <DocumentDuplicateIcon className="h-4 w-4 text-gray-500" />
-            </p>
-            <p className="flex items-center">
-              jumlah yang harus dibayar : {formatRupiah(totalHarga)}{" "}
-              <DocumentDuplicateIcon className="h-4 w-4 text-gray-500" />
-            </p>
-          </div>
-          <div className="bank">
-            <div className="">
-              <Image
-                src={
-                  "https://res.cloudinary.com/websitemuid/image/upload/v1682582746/bca_lmqygl.png"
-                }
-                alt="bca"
-                width={100}
-                height={100}
-              />
-            </div>
-            <p>2838484</p>
+          <div className="flex justify-end p-4">
+            <button className="btn-primary medium">Order</button>
           </div>
         </div>
       </div>

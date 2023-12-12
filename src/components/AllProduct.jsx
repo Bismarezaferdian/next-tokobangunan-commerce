@@ -25,13 +25,7 @@ const AllProduct = ({ brand, category }) => {
   const queryCategory = categoryFilter.map(
     (cat) => `filters[categories][title][$contains]=${cat}`
   );
-  console.log("reaload products page");
 
-  // const {
-  //   data: products,
-  //   error,
-  //   isLoading,
-  // } = useSWR(`${process.env.NEXT_PUBLIC_API_PRODUCT}/products}`, fetcher);
   const {
     data: products,
     error,

@@ -2,9 +2,8 @@ import React, { useEffect, useState } from "react";
 import { getCity, getCost, getProvince } from "@/utils/getData";
 import { combineStore } from "@/utils/zustand/store";
 
-const Shipping = ({ weight }) => {
+const Shipping = ({ weight, setCost, cost }) => {
   //data semua service dari expedisi(eq. reg/yes) beserta harganya
-  const [cost, setCost] = useState([]);
   const [costInfo, setCostInfo] = useState();
   const [select, setSelect] = useState();
 
@@ -28,7 +27,6 @@ const Shipping = ({ weight }) => {
           // Memeriksa apakah data yang diperlukan sudah tersedia
           if (select?.city && weight && select?.courier) {
             const data = await getCost(select?.city, weight, select?.courier);
-            // console.log(data?.data);
             setCostInfo(data[0].costs);
           }
         } catch (error) {
@@ -39,7 +37,15 @@ const Shipping = ({ weight }) => {
     }
   }, [select?.city, weight, select?.courier]);
 
-  console.log(select);
+  useEffect(() => {
+    if (select?.cost !== undefined) {
+      //   setCost(JSON.parse(select.cost));
+      setCost((prev) => ({ ...prev, ["expedisi"]: JSON.parse(select.cost) }));
+    }
+  }, [select?.cost]);
+
+  //   console.log(select?.cost);
+  //   console.log(costInfo[4]);
   return (
     <div
       className="bg-slate-50 p-4"
@@ -134,13 +140,17 @@ const Shipping = ({ weight }) => {
         >
           <option value="">Service</option>
           {costInfo?.map((item, index) => (
-            <option value={item} key={index}>
+            <option value={JSON.stringify(item)} key={index}>
               {item.service}
             </option>
           ))}
         </select>
+        {cost && (
+          <span className="font-light italic text-xs text-red-600">
+            Estimasi sampai {cost?.expedisi?.cost[0]?.etd} hari
+          </span>
+        )}
       </div>
-      å
     </div>
   );
 };

@@ -46,7 +46,7 @@ export const getCost = async (destination, weight, courier) => {
     body: JSON.stringify({
       origin: "501",
       destination: destination,
-      weight: 5000,
+      weight: 1000,
       courier,
     }),
   });

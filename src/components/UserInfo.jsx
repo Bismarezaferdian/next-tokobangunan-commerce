@@ -23,22 +23,22 @@ function UserInfo() {
     combineStore.persist.rehydrate();
   }, []);
 
-  const handleLogout = (e) => {
-    e.preventDefault();
-    setIsLogout(true);
-    setShowUserInfo(!showUserInfo);
+  const destroy = () => {
     combineStore.persist.clearStorage();
+    localStorage.removeItem("store");
+    destroyCookie(null, "token", {
+      path: "/",
+    });
+    router.push("/auth/login");
   };
 
-  useEffect(() => {
-    if (isLogout) {
-      localStorage.removeItem("store");
-      destroyCookie(null, "token", {
-        path: "/",
-      });
-      router.push("/auth/login");
-    }
-  }, [isLogout]);
+  const handleLogout = (e) => {
+    e.preventDefault();
+    console.log("run");
+    setIsLogout(!isLogout);
+    setShowUserInfo(!showUserInfo);
+    destroy();
+  };
 
   return (
     <>
@@ -64,7 +64,7 @@ function UserInfo() {
               </p>
               <button
                 className="cursor-pointer flex items-center gap-1 transition-all duration-700 hover:text-slate-500 "
-                onClick={(e) => handleLogout(e)}
+                onClick={handleLogout}
               >
                 <ArrowRightOnRectangleIcon className="h-4 w-4 text-gray-500" />
                 logout
