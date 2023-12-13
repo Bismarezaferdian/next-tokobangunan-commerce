@@ -2,6 +2,7 @@
 import Shipping from "@/components/shipping";
 import { formatRupiah } from "@/utils/formatMatauang";
 import { combineStore } from "@/utils/zustand/store";
+import { PencilIcon } from "@heroicons/react/24/solid";
 import React, { useEffect, useState } from "react";
 
 function Order() {
@@ -12,13 +13,26 @@ function Order() {
     totalHarga: 0,
     jenisPembayaran: "",
     bank: "",
-    products: products,
+    product: null,
+    //add user relation di database
+    users_permissions_users: null,
   });
 
+  // useEffect(() => {
+  //   combineStore.persist.rehydrate();
+  // }, []);
   useEffect(() => {
-    combineStore.persist.rehydrate();
+    const fetchData = async () => {
+      await combineStore.persist.rehydrate();
+      setDataOrder((prev) => ({
+        ...prev,
+        product: combineStore.getState().products,
+        users_permissions_users: combineStore.getState().user.id,
+      }));
+    };
+    fetchData();
   }, []);
-  //sementara
+
   useEffect(() => {
     if (
       (totalPrice !== undefined && cost !== null && cost) ||
@@ -42,7 +56,6 @@ function Order() {
     }
     setExpedisi(e.target.value);
   };
-  console.log(dataOrder.jenisPembayaran);
 
   const handleDataOrder = (e) => {
     setDataOrder((prev) => ({
@@ -51,19 +64,24 @@ function Order() {
     }));
   };
 
+  const handleOrder = () => {
+    //post order
+  };
+
   return (
     <div className="container mx-auto">
       <div className="flex gap-2">
         <div className=" flex flex-col detail-transaksi w-full gap-2 ">
           <div className="alamat bg-slate-50 p-4 ">
             <h1 className=" text-sm font-semibold ">Detail pengiriman</h1>
-            <p className="text-sm text-slate-600">
-              alamat: jl.ks tubun,kel palmerah, jakarta barat, jakarta , kode
-              pos 112334
-            </p>
-            <p className="text-sm text-slate-600">A/N: BISMA REZA FERDIAN</p>
-            <p className="text-sm text-slate-600">telp: 082211777272</p>
+            <p className="text-sm text-slate-600">{user.username}</p>
+            <p className="text-sm text-slate-600">{user.address}</p>
+            <p className="text-sm text-slate-600">{user.phoneNumber}</p>
+            <button className="text-xs flex  text-slate-900 mt-2 px-2 py-1 rounded-sm border border-slate-900 hover:bg-slate-100">
+              ubah alamat
+            </button>
           </div>
+
           <div className="detail-barang p-4 bg-slate-50 ">
             <h1 className="text-sm font-semibold ">Detail Barang</h1>
             {products.map((item, index) => (
@@ -148,7 +166,7 @@ function Order() {
               <option value="bank">Transfer bank manual</option>
               <option value="VA">Virtual account</option>
             </select>
-            {dataOrder?.JenisPembayaran === "VA" && (
+            {dataOrder?.jenisPembayaran === "VA" && (
               <span className="font-light italic text-xs text-red-600">
                 maaf jenis pembayaran ini belum tersedia sekarang
               </span>
@@ -164,7 +182,7 @@ function Order() {
                 <select
                   onChange={handleDataOrder}
                   id="bank"
-                  name="courier"
+                  name="bank"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                 >
                   <option value="">-Pilih Bank-</option>

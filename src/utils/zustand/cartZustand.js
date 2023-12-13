@@ -51,6 +51,7 @@ const useCartStore = (set, get) => ({
         qty: get().qty,
         weight: get().weight,
         totalPrice: get().totalPrice,
+        //add user relation di database
         users_permissions_users: item.userID,
       },
     };

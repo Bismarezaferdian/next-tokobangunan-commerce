@@ -37,6 +37,7 @@ function Login() {
       body: JSON.stringify(data),
     });
     const response = await res.json();
+    console.log(response);
     //update cookies
     if (res.ok) {
       setCookie(null, "token", response.jwt, {

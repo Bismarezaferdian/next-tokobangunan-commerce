@@ -3,6 +3,7 @@ import { combineStore } from "@/utils/zustand/store";
 import {
   ArchiveBoxIcon,
   ArrowRightOnRectangleIcon,
+  UserCircleIcon,
   UserIcon,
 } from "@heroicons/react/24/solid";
 import Link from "next/link";
@@ -56,12 +57,18 @@ function UserInfo() {
             <div className="w-30 gap-2">
               <p className="border-b-2 flex items-center gap-1">
                 <UserIcon className="h-4 w-4x text-gray-500" />
-                {user.username}
+                hello, {user.username}
               </p>
               <p className="border-b-2 flex items-center gap-1">
                 <ArchiveBoxIcon className="h-4 w-4 text-gray-500" />
                 pesanan saya
               </p>
+              <Link href={"/profile"}>
+                <button className="cursor-pointer flex items-center gap-1 transition-all duration-700 hover:text-slate-500 ">
+                  <UserCircleIcon className="h-4 w-4 text-gray-500" />
+                  profile
+                </button>
+              </Link>
               <button
                 className="cursor-pointer flex items-center gap-1 transition-all duration-700 hover:text-slate-500 "
                 onClick={handleLogout}
