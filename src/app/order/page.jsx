@@ -1,19 +1,22 @@
 "use client";
 import Shipping from "@/components/shipping";
 import { formatRupiah } from "@/utils/formatMatauang";
+import { errorMessage, successMessage } from "@/utils/notification";
 import { combineStore } from "@/utils/zustand/store";
-import { PencilIcon } from "@heroicons/react/24/solid";
 import React, { useEffect, useState } from "react";
+import { ToastContainer } from "react-toastify";
 
 function Order() {
   const { products, qty, weight, totalPrice, user } = combineStore();
   const [expedisi, setExpedisi] = useState(null);
   const [cost, setCost] = useState();
+  const [select, setSelect] = useState();
   const [dataOrder, setDataOrder] = useState({
     totalHarga: 0,
     jenisPembayaran: "",
     bank: "",
     product: null,
+    pengiriman: null,
     //add user relation di database
     users_permissions_users: null,
   });
@@ -41,11 +44,12 @@ function Order() {
       setDataOrder((prev) => ({
         ...prev,
         totalHarga: totalPrice + (cost?.toko || cost?.expedisi?.cost[0]?.value),
+        pengiriman: select,
       }));
     }
   }, [totalPrice, cost]);
 
-  console.log(dataOrder);
+  // console.log(dataOrder);
 
   const handleSelect = (e) => {
     if (e.target.value === "toko") {
@@ -64,12 +68,32 @@ function Order() {
     }));
   };
 
-  const handleOrder = () => {
+  const handleOrder = async () => {
     //post order
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ data: dataOrder }),
+    });
+    const response = await res.json();
+    //handle jika post database berhasil/tidak
+
+    if (res.ok) {
+      console.log("pesanan berhasil !");
+      successMessage("pesanan berhasil !");
+    } else {
+      errorMessage(response.error.message);
+    }
   };
+  // console.log(JSON.parse(select.cost));
+
+  console.log(dataOrder);
 
   return (
     <div className="container mx-auto">
+      <ToastContainer />
       <div className="flex gap-2">
         <div className=" flex flex-col detail-transaksi w-full gap-2 ">
           <div className="alamat bg-slate-50 p-4 ">
@@ -144,7 +168,13 @@ function Order() {
           </div>
 
           {expedisi === "expedisi" && (
-            <Shipping weight={weight} setCost={setCost} cost={cost} />
+            <Shipping
+              weight={weight}
+              setCost={setCost}
+              cost={cost}
+              setSelect={setSelect}
+              select={select}
+            />
           )}
         </div>
         <div className="daftar-bank w-full h-fit">
@@ -234,7 +264,9 @@ function Order() {
             </div>
           </div>
           <div className="flex justify-end p-4">
-            <button className="btn-primary medium">Order</button>
+            <button className="btn-primary medium" onClick={handleOrder}>
+              Order
+            </button>
           </div>
         </div>
       </div>

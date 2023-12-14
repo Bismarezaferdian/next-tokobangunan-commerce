@@ -9,21 +9,21 @@ import { parseCookies } from "nookies";
 import { useRouter } from "next/navigation";
 
 const SingleProduct = ({ product }) => {
-  const { user } = combineStore();
+  const { user, addToCart } = combineStore();
   const { token } = parseCookies();
   // console.log(user);
 
-  const addToCart = combineStore((state) => state.addToCart);
+  // const addToCart = combineStore((state) => state.addToCart);
   const [dataProduct, setDataProduct] = useState(product.data);
   const [qty, setQty] = useState(1);
 
   const router = useRouter();
 
+  console.log(product);
   const handleAddCart = (e) => {
     //post data in cart where id ...
     //post data in zustand
     e.preventDefault();
-
     const data = {
       ...dataProduct.attributes,
       qty,

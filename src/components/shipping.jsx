@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import { getCity, getCost, getProvince } from "@/utils/getData";
 import { combineStore } from "@/utils/zustand/store";
 
-const Shipping = ({ weight, setCost, cost }) => {
+const Shipping = ({ weight, setCost, cost, setSelect, select }) => {
   //data semua service dari expedisi(eq. reg/yes) beserta harganya
   const [costInfo, setCostInfo] = useState();
-  const [select, setSelect] = useState();
 
   const handleSelects = (e) => {
     setSelect((prev) => ({
@@ -44,7 +43,6 @@ const Shipping = ({ weight, setCost, cost }) => {
     }
   }, [select?.cost]);
 
-  //   console.log(select?.cost);
   //   console.log(costInfo[4]);
   return (
     <div
