@@ -159,6 +159,31 @@ const useCartStore = (set, get) => ({
       errorMessage("user tidak ada ");
     }
   },
+
+  resetCart: async (cartID) => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/carts/${cartID}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      //handle jika delete database berhasil/tidak
+      if (res.ok) {
+        set(() => ({
+          cartID: null,
+          products: [],
+          qty: 0,
+          weight: 0,
+          totalPrice: 0,
+        }));
+        // successMessage("product telah dihapus");
+      }
+    } catch (error) {
+      errorMessage(error);
+    }
+  },
 });
 
 export default useCartStore;

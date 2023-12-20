@@ -26,8 +26,6 @@ function CartPage() {
     }
   }, [data]);
 
-  // console.log(products);
-
   const handleDelete = (item) => {
     // const filter = products.filter((product) => product.id !== item.id);
     // console.log(item);
@@ -108,7 +106,7 @@ function CartPage() {
         <Link
           href={{
             pathname: "/order",
-            query: { qty: qty, weight: weight, totalPrice: totalPrice },
+            // query: { qty: qty, weight: weight, totalPrice: totalPrice },
           }}
         >
           <button

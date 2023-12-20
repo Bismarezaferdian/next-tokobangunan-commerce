@@ -59,10 +59,12 @@ function UserInfo() {
                 <UserIcon className="h-4 w-4x text-gray-500" />
                 hello, {user.username}
               </p>
-              <p className="border-b-2 flex items-center gap-1">
-                <ArchiveBoxIcon className="h-4 w-4 text-gray-500" />
-                pesanan saya
-              </p>
+              <Link href={"/listOrder"}>
+                <p className="border-b-2 flex items-center gap-1">
+                  <ArchiveBoxIcon className="h-4 w-4 text-gray-500" />
+                  pesanan saya
+                </p>
+              </Link>
               <Link href={"/profile"}>
                 <button className="cursor-pointer flex items-center gap-1 transition-all duration-700 hover:text-slate-500 ">
                   <UserCircleIcon className="h-4 w-4 text-gray-500" />

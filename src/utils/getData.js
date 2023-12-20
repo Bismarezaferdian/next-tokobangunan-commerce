@@ -1,6 +1,7 @@
 // import useSWR from "swr";
 
 import useSWR from "swr";
+import { errorMessage, successMessage } from "./notification";
 
 // const fetcher = (url) =>
 //   fetch(url, {
@@ -53,4 +54,58 @@ export const getCost = async (destination, weight, courier) => {
   const data = await res.json();
   //   const data = await res.json();
   return data;
+};
+
+export const updateStok = async (idProduct, data) => {
+  try {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${idProduct}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        data: {
+          stock: data,
+        },
+      }),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getOrder = (userID) => {
+  const param = `?populate=*&filters[users_permissions_users][id][$eq]=${userID}`;
+  const {
+    data: order,
+    mutate,
+    isLoading,
+    // error,
+  } = useSWR([`${process.env.NEXT_PUBLIC_API_URL}/orders` + param], fecther);
+
+  return { order, mutate, isLoading };
+};
+
+export const updateStatusPesanan = async (orderID, data) => {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/orders/${orderID}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          data: {
+            status: data,
+          },
+        }),
+      }
+    );
+    // if (res.ok) {
+    //   successMessage("success update status");
+    // }
+  } catch (error) {
+    errorMessage(error);
+  }
 };

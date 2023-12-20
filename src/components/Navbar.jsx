@@ -33,7 +33,7 @@ const Navbar = () => {
             <Link href="/products">Product</Link>
           </button>
           <button className="font-semibold text-slate-500">
-            <Link href="/">About</Link>
+            <Link href="/payment">About</Link>
           </button>
           <button className="font-semibold text-slate-500">
             <Link href="/">Contact</Link>

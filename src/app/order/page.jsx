@@ -1,56 +1,92 @@
 "use client";
 import Shipping from "@/components/shipping";
 import { formatRupiah } from "@/utils/formatMatauang";
-import { errorMessage, successMessage } from "@/utils/notification";
+import { updateStok } from "@/utils/getData";
+import { successMessage } from "@/utils/notification";
 import { combineStore } from "@/utils/zustand/store";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 
-function Order() {
-  const { products, qty, weight, totalPrice, user } = combineStore();
+function Order({ searchParams }) {
+  const router = useRouter();
+  //di ambil dari state management zustand
+  const { products, qty, weight, totalPrice, user, resetCart, cartID } =
+    combineStore();
+  const [validation, setValidation] = useState(false);
   const [expedisi, setExpedisi] = useState(null);
+  //menampung biaya ongkir
   const [cost, setCost] = useState();
+  //menampung select dari component shipping/ data jasa expedisi
   const [select, setSelect] = useState();
+  //data dari input user
   const [dataOrder, setDataOrder] = useState({
     totalHarga: 0,
-    jenisPembayaran: "",
-    bank: "",
-    product: null,
-    pengiriman: null,
+    jenisPembayaran: undefined,
+    bank: undefined,
+    product: undefined,
+    pengiriman: undefined,
     //add user relation di database
     users_permissions_users: null,
   });
 
-  // useEffect(() => {
-  //   combineStore.persist.rehydrate();
-  // }, []);
+  //setiap kali page direload setDataOrder product dan users_permissions_users dari zustand
   useEffect(() => {
     const fetchData = async () => {
       await combineStore.persist.rehydrate();
-      setDataOrder((prev) => ({
-        ...prev,
-        product: combineStore.getState().products,
-        users_permissions_users: combineStore.getState().user.id,
-      }));
+      //cek apakah ada data di searchParams.products
+      if (!searchParams.products) {
+        //jika tidak ada update data order dari cart
+        setDataOrder((prev) => ({
+          ...prev,
+          totalHarga: totalPrice,
+          //tidak bisa ambil dari combineStore karna reyhydrate
+          product: combineStore.getState().products,
+          users_permissions_users: combineStore.getState().user.id,
+        }));
+      } else {
+        //jika ada data dari searchParams
+        const dataProduct = JSON.parse(searchParams.products);
+        //jumlahkan semua harga pproduct
+        const totalHarga = dataProduct.product
+          .map((item) => item.price)
+          .flat()
+          .reduce((acc, curr) => acc + curr, 0);
+        //upudate dataOrder dari seacrhParams/history order
+        setDataOrder((prev) => ({
+          ...prev,
+          totalHarga: totalHarga,
+          product: dataProduct.product,
+          users_permissions_users: combineStore.getState().user.id,
+        }));
+      }
     };
+
     fetchData();
   }, []);
 
+  //ketika ada perubahan pada totalPrice dan cost
+  //set cost dari input user yang memilih pengiriman
   useEffect(() => {
     if (
+      //cost di ambil dari data ongkos kirim
       (totalPrice !== undefined && cost !== null && cost) ||
       cost?.cost[0]?.value !== undefined
     ) {
       setDataOrder((prev) => ({
         ...prev,
-        totalHarga: totalPrice + (cost?.toko || cost?.expedisi?.cost[0]?.value),
+        //update total harga di tambah ongkos kirim
+        totalHarga:
+          //cost di ambil dari cost toko dan jasa expedisi
+          dataOrder.totalHarga + (cost?.toko || cost?.expedisi?.cost[0]?.value),
+        //update data dari jasa pengiriman
         pengiriman: select,
       }));
     }
   }, [totalPrice, cost]);
 
-  // console.log(dataOrder);
-
+  //handle user select
   const handleSelect = (e) => {
     if (e.target.value === "toko") {
       setCost((prev) => ({
@@ -60,6 +96,7 @@ function Order() {
     }
     setExpedisi(e.target.value);
   };
+  console.log(select);
 
   const handleDataOrder = (e) => {
     setDataOrder((prev) => ({
@@ -68,28 +105,49 @@ function Order() {
     }));
   };
 
-  const handleOrder = async () => {
-    //post order
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ data: dataOrder }),
-    });
-    const response = await res.json();
-    //handle jika post database berhasil/tidak
+  const runValidation = () => {
+    setValidation(!validation);
+  };
 
-    if (res.ok) {
-      console.log("pesanan berhasil !");
-      successMessage("pesanan berhasil !");
+  const handleOrder = async (e) => {
+    e.preventDefault();
+
+    //post order
+
+    if (
+      !dataOrder.jenisPembayaran ||
+      !dataOrder.bank ||
+      dataOrder.totalPrice === 0
+    ) {
+      runValidation();
     } else {
-      errorMessage(response.error.message);
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ data: dataOrder }),
+        });
+        //handle jika post database berhasil/tidak
+        console.log(res);
+        if (res.ok) {
+          products.map((item) => updateStok(item.id, item.stock - item.qty));
+          resetCart(cartID);
+          successMessage("pesanan berhasil !");
+          router.push(
+            `/payment?totalHarga=${dataOrder.totalHarga}&jenisPembayaran=${dataOrder.jenisPembayaran}&bank=${dataOrder.bank}`
+          );
+        }
+      } catch (error) {
+        alert(error);
+        console.log(error);
+      }
     }
   };
   // console.log(JSON.parse(select.cost));
 
-  console.log(dataOrder);
+  // console.log(dataOrder);
 
   return (
     <div className="container mx-auto">
@@ -108,7 +166,7 @@ function Order() {
 
           <div className="detail-barang p-4 bg-slate-50 ">
             <h1 className="text-sm font-semibold ">Detail Barang</h1>
-            {products.map((item, index) => (
+            {dataOrder?.product?.map((item, index) => (
               <div className="flex w-full border-b-2" key={item.id}>
                 <div className="card-content flex gap-1 w-fit ">
                   <div className="desc-product flex">
@@ -165,6 +223,11 @@ function Order() {
                 Max jarak 10 km dari toko, dikirim hari yang sama
               </span>
             )}
+            {validation && (
+              <span className="font-light italic text-xs text-red-600">
+                Jenis Pengiriman Harus Dipilih
+              </span>
+            )}
           </div>
 
           {expedisi === "expedisi" && (
@@ -193,7 +256,7 @@ function Order() {
               className="bg-slate-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
             >
               <option value={""}>jenis pembayaran</option>
-              <option value="bank">Transfer bank manual</option>
+              <option value="Transfer Bank">Transfer bank manual</option>
               <option value="VA">Virtual account</option>
             </select>
             {dataOrder?.jenisPembayaran === "VA" && (
@@ -201,7 +264,12 @@ function Order() {
                 maaf jenis pembayaran ini belum tersedia sekarang
               </span>
             )}
-            {dataOrder?.jenisPembayaran === "bank" && (
+            {!dataOrder.jenisPembayaran && validation && (
+              <span className="font-light italic text-xs text-red-600">
+                Jenis Pembayaran Harus Dipilih
+              </span>
+            )}
+            {dataOrder?.jenisPembayaran === "Transfer Bank" && (
               <div className="py-4">
                 <label
                   htmlFor="bank"
@@ -220,12 +288,17 @@ function Order() {
                   <option value="mandiri-1234556">Bank MANDIRI</option>
                   <option value="bri-1234455">Bank BRI</option>
                 </select>
+                {!dataOrder.bank && validation && (
+                  <span className="font-light italic text-xs text-red-600">
+                    Bank Harus Dipilih
+                  </span>
+                )}
               </div>
             )}
           </div>
 
           <div className="alamat bg-slate-50 p-4 mt-4">
-            <h1 className=" text-sm font-semibold ">Total Harga</h1>
+            {/* <h1 className=" text-sm font-semibold ">Total Harga</h1>
             <div className="flex justify-between">
               <p className="text-sm  text-slate-600">
                 Harga sebelum ppn
@@ -234,9 +307,9 @@ function Order() {
                 </span>
               </p>
               <p className="text-sm font-semibold">
-                {formatRupiah(totalPrice)}
+                {formatRupiah(dataOrder?.totalHarga)}
               </p>
-            </div>
+            </div> */}
             <div className="flex justify-between">
               <p className="text-sm font-semibold text-slate-600">ppn: </p>
               <p>free</p>
@@ -255,8 +328,11 @@ function Order() {
               </p>
             </div>
             <div className="flex justify-between">
-              <p className="text-sm font-semibold text-slate-600">
-                Total harga:{" "}
+              <p className="text-sm  text-slate-600">
+                Harga sebelum ppn
+                <span className="font-light italic">
+                  ( {qty} {`${qty > 1 ? "items" : "item"}`}):
+                </span>
               </p>
               <p className="text-sm font-semibold">
                 {formatRupiah(dataOrder?.totalHarga)}
@@ -264,9 +340,25 @@ function Order() {
             </div>
           </div>
           <div className="flex justify-end p-4">
-            <button className="btn-primary medium" onClick={handleOrder}>
-              Order
-            </button>
+            <Link
+              href={{
+                // pathname: path,
+                query: {
+                  totalHarga: dataOrder.totalHarga,
+                  jenisPembayaran: dataOrder.jenisPembayaran,
+                  bank: dataOrder.bank,
+                },
+                // type: "replace",
+              }}
+            >
+              <button
+                type="button"
+                className="btn-primary medium"
+                onClick={handleOrder}
+              >
+                Order
+              </button>
+            </Link>
           </div>
         </div>
       </div>
@@ -274,4 +366,5 @@ function Order() {
   );
 }
 
+// export default withRouter(Order);
 export default Order;
