@@ -1,3 +1,4 @@
+import WrapLayout from "@/app/WrapLayout";
 import BrandSlinder from "./BrandSlider";
 
 const getData = async () => {
@@ -21,15 +22,16 @@ const Brand = async () => {
   const data = await getData();
 
   return (
-    <div>
-      <div className="flex justify-between items-center ">
-        <h1 className="font-semibold flex justify-start text-lg ">
-          Brand pilihan
-        </h1>
-        <button className="">lihat semua</button>
+    <WrapLayout>
+      <div>
+        <div className="flex justify-between items-center py-4">
+          <h1 className="font-semibold text-base md:text-lg whitespace-nowrap">
+            Brand pilihan
+          </h1>
+        </div>
+        <BrandSlinder data={data} />
       </div>
-      <BrandSlinder data={data} />
-    </div>
+    </WrapLayout>
   );
 };
 

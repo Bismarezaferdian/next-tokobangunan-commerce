@@ -4,6 +4,7 @@ import "swiper/css";
 import "react-toastify/dist/ReactToastify.css";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import { motion } from "framer-motion";
 
 const inter = Inter({ subsets: ["latin"] });
 

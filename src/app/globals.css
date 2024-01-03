@@ -15,10 +15,20 @@
 }
 @layer components {
   .btn-primary {
-    @apply text-white bg-blue-800 px-2 rounded-md cursor-pointer;
+    @apply bg-green-100 text-green-700 px-2 rounded-md cursor-pointer items-center;
   }
 
   .medium {
-    @apply max-w-xs w-36 h-9 px-6 whitespace-nowrap text-center items-center cursor-pointer transition-all hover:bg-blue-600 disabled:bg-blue-400 text-blue-50;
+    @apply max-w-xs w-36 h-9 px-6 whitespace-nowrap text-center items-center cursor-pointer transition-colors hover:bg-green-300 disabled:bg-blue-400;
+  }
+
+  .underline {
+    @apply absolute w-full left-0 right-0 h-1 bg-green-700
+    /* position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--accent); */;
   }
 }

@@ -1,17 +1,21 @@
 "use client";
 import { combineStore } from "@/utils/zustand/store";
+import { TrashIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import useSWR from "swr";
+import { motion } from "framer-motion";
+import { formatRupiah } from "@/utils/formatMatauang";
 
 const fecher = ([url, param]) =>
   fetch(`${url}${param}`).then((res) => res.json());
 
 function CartPage() {
-  const router = useRouter();
+  // const [hovered, setHovered] = useState(false);
+  // const router = useRouter();
   const { products, qty, weight, totalPrice, user, updateCart, deleteCart } =
     combineStore();
   const param = `?populate=*&filters[users_permissions_users][id][$eq]=${user.id}`;
@@ -36,13 +40,13 @@ function CartPage() {
     combineStore.persist.rehydrate();
   }, []);
 
-  const handleCheckout = (e) => {
-    e.preventDefault();
-    router.push({
-      pathname: "/order",
-      query: { pid: "test" },
-    });
-  };
+  // const handleCheckout = (e) => {
+  //   e.preventDefault();
+  //   router.push({
+  //     pathname: "/order",
+  //     query: { pid: "test" },
+  //   });
+  // };
 
   return (
     <div className="px-4">
@@ -78,19 +82,28 @@ function CartPage() {
               >
                 stock: {item.stock}
               </p>
-              <p className="card  md:hidden">Rp.{item.price}</p>
+              <p className="card  md:hidden">{formatRupiah(item.price)}</p>
             </div>
           </div>
           <div className="card-price hidden md:flex items-center p-2 gap-3">
-            <p className="card "> Rp.{item.price}</p>
+            <p className="card "> {formatRupiah(item.price)}</p>
             <div className="border h-4 border-slate-700"></div>
-            <button
-              onClick={() => handleDelete(item)}
-              className="btn-primary bg-red-300 text-slate-800 text-sm p-1 hover:bg-red-500 "
+            {/* <span
+              className={`${
+                hovered ? "" : "hidden"
+              } absolute translate-x-[88px] -translate-y-8 text-xs bg-red-200 text-red-600 rounded-lg px-2`}
             >
-              {" "}
-              Delete
-            </button>
+              delete
+            </span> */}
+            <motion.div whileHover={{ scale: 1.2 }} className="">
+              <button
+                onClick={() => handleDelete(item)}
+                className="  text-slate-800 text-sm p-1 hover:text-gray-500 "
+              >
+                {" "}
+                <TrashIcon className="h-6 w-6 text-gray-950" />
+              </button>
+            </motion.div>
           </div>
         </div>
       ))}
@@ -101,7 +114,8 @@ function CartPage() {
         </div>
         <div className=" ">
           {" "}
-          total Price :<span className="font-semibold">{totalPrice}</span>
+          total Price :
+          <span className="font-semibold"> {formatRupiah(totalPrice)} </span>
         </div>
         <Link
           href={{
@@ -112,7 +126,7 @@ function CartPage() {
           <button
             // onClick={handleCheckout}
             disabled={qty === 0}
-            className="btn-primary medium flex w-fit mt-2"
+            className="bg-green-700  py-2 px-4 text-slate-50 rounded-md transition-colors hover:bg-green-600 disabled:bg-green-600 disabled:text-white disabled:cursor-not-allowed"
           >
             Checkout now
           </button>

@@ -44,7 +44,7 @@ function UserInfo() {
   return (
     <>
       {user.id ? (
-        <div className="overflow-hidden">
+        <div className=" hidden md:flex overflow-hidden">
           <UserIcon
             className={`h-6 w-6 text-black cursor-pointer`}
             onClick={() => setShowUserInfo(!showUserInfo)}
@@ -52,7 +52,7 @@ function UserInfo() {
           <div
             className={`${
               showUserInfo ? "flex" : "hidden"
-            } absolute  -translate-x-32 translate-y-3 bg-slate-100 p-2 transition-all duration-1000 overflow-hidden w-36`}
+            } absolute  -translate-x-32 translate-y-3 bg-slate-100 p-2 transition-all duration-1000 overflow-hidden w-36 z-10`}
           >
             <div className="w-30 gap-2">
               <p className="border-b-2 flex items-center gap-1">

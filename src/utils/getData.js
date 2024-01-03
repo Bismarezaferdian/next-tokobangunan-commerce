@@ -109,3 +109,16 @@ export const updateStatusPesanan = async (orderID, data) => {
     errorMessage(error);
   }
 };
+
+export const getCategory = () => {
+  const {
+    data: category,
+    error: categoryError,
+    isLoading: categoryLoading,
+  } = useSWR(
+    `${process.env.NEXT_PUBLIC_API_URL}/categories?populate=*`,
+    fecther
+  );
+
+  return { category, categoryError, categoryLoading };
+};

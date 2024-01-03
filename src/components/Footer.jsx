@@ -4,9 +4,8 @@ import { EnvelopeIcon, PhoneIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 
 const Footer = () => {
-  const router = useRouter();
-
   return (
+    // <WrapLayout>
     <div className="container mx-auto  ">
       <div className="grid grid-flow-row p-4 md:grid-rows-2 md:grid-cols-4  h-full ">
         <div className=" grid row-span-2 relative w-full justify-items-start ">
@@ -85,6 +84,7 @@ const Footer = () => {
         </div>
       </div>
     </div>
+    // </WrapLayout>
   );
 };
 

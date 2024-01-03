@@ -4,8 +4,10 @@ import { formatRupiah } from "@/utils/formatMatauang";
 import { updateStok } from "@/utils/getData";
 import { successMessage } from "@/utils/notification";
 import { combineStore } from "@/utils/zustand/store";
+import { TruckIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import path from "path";
 import React, { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 
@@ -159,9 +161,11 @@ function Order({ searchParams }) {
             <p className="text-sm text-slate-600">{user.username}</p>
             <p className="text-sm text-slate-600">{user.address}</p>
             <p className="text-sm text-slate-600">{user.phoneNumber}</p>
-            <button className="text-xs flex  text-slate-900 mt-2 px-2 py-1 rounded-sm border border-slate-900 hover:bg-slate-100">
-              ubah alamat
-            </button>
+            <Link href="/profile">
+              <button className="text-xs flex  text-slate-900 mt-2 px-2 py-1 rounded-sm border border-slate-900 hover:bg-slate-100">
+                ubah alamat
+              </button>
+            </Link>
           </div>
 
           <div className="detail-barang p-4 bg-slate-50 ">

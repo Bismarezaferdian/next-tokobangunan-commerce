@@ -1,5 +1,4 @@
 import CartPage from "@/components/CartPage";
-import Image from "next/image";
 import React from "react";
 
 const Cart = () => {

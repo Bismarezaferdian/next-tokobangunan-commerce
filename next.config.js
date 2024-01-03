@@ -25,6 +25,7 @@ const nextConfig = {
   images: {
     domains: [process.env.STRAPI_DOMAIN, "res.cloudinary.com"],
   },
+
   reactStrictMode: false,
 };
 

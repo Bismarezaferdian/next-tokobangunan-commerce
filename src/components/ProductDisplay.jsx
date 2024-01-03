@@ -1,6 +1,6 @@
-import Nippon from "../../public/nipponcat.jpeg";
 import Link from "next/link";
 import ProductSlider from "./ProductSlider";
+import WrapLayout from "@/app/WrapLayout";
 
 const getData = async () => {
   const res = await fetch("http://localhost:1337/api/products?populate=*", {
@@ -22,17 +22,21 @@ const ProductDisplay = async () => {
   // console.log(datas);
 
   return (
-    <div>
-      <div className="">
-        <div className="flex justify-between items-center ">
-          <h1 className="font-semibold flex justify-start text-lg ">Product</h1>
+    <WrapLayout>
+      <div>
+        <div className="flex justify-between items-center overflow-hidden pt-4 ">
+          <h1 className="font-semibold text-base md:text-lg whitespace-nowrap">
+            Product Terbaru
+          </h1>
           <button className="">
-            <Link href="/products">lihat semua</Link>
+            <Link href="/products">
+              <p className="text-emerald-600 font-semibold">lihat semua</p>
+            </Link>
           </button>
         </div>
         <ProductSlider data={datas} />
       </div>
-    </div>
+    </WrapLayout>
   );
 };
 
