@@ -7,12 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { formatRupiah } from "@/utils/formatMatauang";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import {
-  AdjustmentsHorizontalIcon,
-  ArrowsUpDownIcon,
-  FunnelIcon,
-  MagnifyingGlassIcon,
-} from "@heroicons/react/24/solid";
+import { AdjustmentsHorizontalIcon } from "@heroicons/react/24/solid";
 import { XCircleIcon } from "@heroicons/react/24/outline";
 
 const fetcher = (url) =>
@@ -102,8 +97,6 @@ const AllProduct = ({ brand, category }) => {
     visible: { opacity: 1, y: 0 },
     hidden: { opacity: 0, y: 100 },
   };
-
-  console.log(filter);
 
   return (
     <div>

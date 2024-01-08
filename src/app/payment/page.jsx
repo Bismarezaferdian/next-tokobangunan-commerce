@@ -2,8 +2,6 @@
 import { successMessage } from "@/utils/notification";
 import { ClockIcon } from "@heroicons/react/24/outline";
 import { DocumentDuplicateIcon } from "@heroicons/react/24/solid";
-import { useParams, useSearchParams } from "next/navigation";
-import React, { useState } from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { ToastContainer } from "react-toastify";
 
