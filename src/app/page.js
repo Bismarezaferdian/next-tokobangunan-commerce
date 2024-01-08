@@ -1,5 +1,3 @@
-import Image from "next/image";
-import Mega from "../../public/megautama.png";
 import Brand from "@/components/Brand.jsx";
 import ProductDisplay from "@/components/ProductDisplay";
 import ImgDisplay from "@/components/ImgDisplay";
@@ -8,6 +6,7 @@ import Category from "@/components/Category";
 import About from "@/components/About";
 import { parseCookies, setCookie } from "nookies";
 import WrapLayout from "./WrapLayout";
+import Hero from "@/components/Hero";
 
 const getDataCart = async (userID) => {
   const res = await fetch(
@@ -29,17 +28,7 @@ const getDataCart = async (userID) => {
 export default async function Home() {
   return (
     <div>
-      <div className="bg-black w-screen ">
-        <Image
-          src={Mega}
-          alt="toko"
-          priority={true}
-          // sizes="(max-heigth:200px)"
-          style={{ color: "transparent", opacity: "0.7" }}
-        />
-
-        <h1 className="z-40 text-white absolute translate-x-40">test</h1>
-      </div>
+      <Hero />
       <div className="container px-2 mx-auto overflow-hidden backdrop-opacity-20 ">
         <div>
           <Category />

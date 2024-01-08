@@ -57,14 +57,14 @@ const Profile = () => {
       <div className="alamat">
         <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <label
-            htmlFor="userName"
+            htmlFor="username"
             className="block text-gray-700 text-sm font-bold my-4"
           >
             Username
           </label>
           <input
             type="text"
-            id="userName"
+            id="username"
             name="username"
             defaultValue={dataUser?.username}
             onChange={handleDataUser}
@@ -72,14 +72,14 @@ const Profile = () => {
             className="focus:shadow-soft-primary-outline min-h-unset text-sm leading-5.6 ease-soft block h-auto w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-green-500 focus:outline-none"
           />
           <label
-            htmlFor="phoneNumber"
+            htmlFor="phonenumber"
             className="block text-gray-700 text-sm font-bold mt-4"
           >
             No. Telp
           </label>
           <input
-            type="phoneNumber"
-            id="phoneNumber"
+            type="text"
+            id="phonenumber"
             name="phoneNumber"
             onChange={handleDataUser}
             defaultValue={dataUser?.phoneNumber}
@@ -87,7 +87,7 @@ const Profile = () => {
             className="focus:shadow-soft-primary-outline min-h-unset text-sm leading-5.6 ease-soft block h-auto w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-green-500 focus:outline-none"
           />
           <label
-            htmlFor="userName"
+            htmlFor="email"
             className="block text-gray-700 text-sm font-bold mt-4"
           >
             Email
@@ -102,7 +102,7 @@ const Profile = () => {
             className="focus:shadow-soft-primary-outline min-h-unset text-sm leading-5.6 ease-soft block h-auto w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-green-500 focus:outline-none"
           />
           <label
-            htmlFor="address"
+            htmlFor="alamat"
             className="block text-gray-700 text-sm font-bold mt-8"
           >
             Alamat

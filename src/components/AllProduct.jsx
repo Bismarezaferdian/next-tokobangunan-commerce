@@ -7,6 +7,13 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { formatRupiah } from "@/utils/formatMatauang";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import {
+  AdjustmentsHorizontalIcon,
+  ArrowsUpDownIcon,
+  FunnelIcon,
+  MagnifyingGlassIcon,
+} from "@heroicons/react/24/solid";
+import { XCircleIcon } from "@heroicons/react/24/outline";
 
 const fetcher = (url) =>
   fetch(url, {
@@ -22,6 +29,13 @@ const AllProduct = ({ brand, category }) => {
   const router = useRouter();
   const [brandFilter, setBrandFilter] = useState([]);
   const [categoryFilter, setCategoryFilter] = useState([]);
+  const [filter, setFilter] = useState(false);
+
+  useEffect(() => {
+    if (window.innerWidth >= 772) {
+      setFilter(true);
+    }
+  }, []);
 
   //handle search from home page
   useEffect(() => {
@@ -89,12 +103,47 @@ const AllProduct = ({ brand, category }) => {
     hidden: { opacity: 0, y: 100 },
   };
 
+  console.log(filter);
+
   return (
-    <>
-      <div className="grid md:items-start grid-cols-1  md:grid-cols-5 overflow-hidden gap-3  p-2">
-        <div className="hidden md:grid bg-white shadow-md shadow-slate-100 col-span-1 w-full max-h-screen p-4 ">
+    <div>
+      <ToastContainer />
+
+      <div className=" md:hidden h-fit">
+        <div className="desc">
+          <h1>Semua Produk</h1>
+        </div>
+        <div className=" flex flex-1 justify-between px-2 ">
+          <div className="search flex justify-center items-center gap-2">
+            <input
+              type="text"
+              id="seach"
+              className="rounded-lg text-sm py-2 px-2 border-none shadow-md shadow-slate-300"
+              placeholder="search..."
+            />
+            <motion.div
+              whileTap="visible"
+              variants={variants}
+              className="filter bg-white flex justify-center items-center p-2 rounded-lg shadow-md shadow-slate-300 "
+              onClick={() => setFilter(!filter)}
+            >
+              <AdjustmentsHorizontalIcon className="h-5 w-5 text-gray-500" />
+            </motion.div>
+          </div>
+        </div>
+      </div>
+      <div className=" grid md:items-start grid-cols-1  md:grid-cols-5 overflow-hidden gap-3 p-2">
+        <motion.div
+          initial="hidden"
+          animate={filter ? "visible" : "hidden"}
+          transition={{ type: "spring", bounce: 0.5 }}
+          variants={variants}
+          className="absolute translate-x-full rounded-t-3xl md:rounded-none  md:relative md:grid bg-white shadow-xl md:shadow-none shadow-slate-600 col-span-1 w-full   p-4 z-50 "
+        >
+          <div className="flex md:hidden w-full justify-end ">
+            <XCircleIcon className="h-6 w-6 text-gray-500" />
+          </div>
           <h1 className="font-semibold text-slate-800">Kategory product</h1>
-          <ToastContainer />
 
           <div className="wrapp-kategory container overscroll-contain overflow-auto md:h-fit md:max-h-48 p-4">
             {/* example value kategory  */}
@@ -102,6 +151,7 @@ const AllProduct = ({ brand, category }) => {
               <div className="flex items-center mb-4" key={item.id}>
                 <input
                   type="checkbox"
+                  id={item.attributes.title}
                   name="categoryFilter"
                   checked={categoryFilter.includes(item.attributes.title)}
                   value={item.attributes.title}
@@ -109,7 +159,7 @@ const AllProduct = ({ brand, category }) => {
                   className="w-4 h-4 text-blue-600 bg-gray-100 rounded-3xl focus:ring-blue-500"
                 />
                 <label
-                  htmlFor="default-checkbox"
+                  htmlFor={item.attributes.title}
                   className={`ml-2 text-sm font-medium text-gray-400 transition-all ${
                     categoryFilter.includes(item.attributes.title)
                       ? "text-gray-700"
@@ -123,39 +173,19 @@ const AllProduct = ({ brand, category }) => {
           </div>
           <h1 className="font-semibold text-slate-800">Brand</h1>
           <div className="wrapp-kategory container overscroll-contain overflow-auto md:h-48 p-4">
-            {/* example value kategory  */}
-            {/* <div className="flex items-center mb-4">
-              <input
-                type="checkbox"
-                name="brandFilter"
-                value={""}
-                onChange={handleBrand}
-                className="w-4 h-4 text-blue-600 bg-gray-100 rounded-3xl focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-              />
-              <label
-                htmlFor="default-checkbox"
-                // className={`ml-2 text-sm font-medium text-gray-400 ${
-                //   brandFilter?.includes(item.attributes.title)
-                //     ? "text-gray-700"
-                //     : ""
-                // }  `}
-              >
-                All
-              </label>
-            </div> */}
-
             {brand?.data.map((item) => (
               <div className="flex items-center mb-4" key={item.id}>
                 <input
                   type="checkbox"
                   name="brandFilter"
+                  id={item.attributes.title}
                   checked={brandFilter.includes(item.attributes.title)}
                   value={item.attributes.title}
                   onChange={handleBrand}
                   className="w-4 h-4 text-blue-600 bg-gray-100 rounded-3xl focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
                 <label
-                  htmlFor="default-checkbox"
+                  htmlFor={item.attributes.title}
                   className={`ml-2 text-sm font-medium text-gray-400 transition-all ${
                     brandFilter.includes(item.attributes.title)
                       ? "text-gray-700"
@@ -170,40 +200,10 @@ const AllProduct = ({ brand, category }) => {
 
           <h1 className="font-semibold text-slate-800">Harga</h1>
           <div className="wrapp-kategory container overscroll-contain overflow-auto md:h-48 p-4">
-            {/* example value kategory  */}
             <div className="flex items-center mb-4">
               <input
                 type="checkbox"
-                name="default-checkbox"
-                value=""
-                className="w-4 h-4 text-blue-600 bg-gray-100 rounded-3xl focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-              />
-              <label
-                htmlFor="default-checkbox"
-                className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >
-                Default checkbox
-              </label>
-            </div>
-            {/* example value kategory  */}
-            <div className="flex items-center mb-4">
-              <input
-                type="checkbox"
-                name="default-checkbox"
-                value=""
-                className="w-4 h-4 text-blue-600 bg-gray-100 rounded-3xl focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-              />
-              <label
-                htmlFor="default-checkbox"
-                className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >
-                Default checkbox
-              </label>
-            </div>
-            {/* example value kategory  */}
-            <div className="flex items-center mb-4">
-              <input
-                type="checkbox"
+                id="default-checkbox"
                 name="default-checkbox"
                 value=""
                 className="w-4 h-4 text-blue-600 bg-gray-100 rounded-3xl focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
@@ -216,18 +216,18 @@ const AllProduct = ({ brand, category }) => {
               </label>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* product */}
         {isLoading && <h1>loading ....</h1>}
         {error && <h1>something went wrong !!!</h1>}
         {!products?.data.length && <h1>product belum ada ...</h1>}
-        <div className="grid grid-cols-2  md:grid-cols-5 md:col-span-4 gap-4 w-full h-fit overflow-hidden  ">
+        <div className="grid grid-cols-2 top-0 md:grid-cols-5 md:col-span-4 gap-4 w-full  overflow-hidden">
           {products?.data.map((item, i) => (
             <motion.div
               whileHover={{ scale: 1.1 }}
               transition={{ duration: 1 }}
-              className="card p-1 overflow-hidden flex flex-col shadow-md bg-white rounded-md pb-4"
+              className={` card p-1 overflow-hidden flex flex-col shadow-md bg-white rounded-md pb-4`}
               key={item.id}
             >
               <h1>{isLoading}</h1>
@@ -266,7 +266,7 @@ const AllProduct = ({ brand, category }) => {
                       {formatRupiah(item.attributes.price)}
                     </h1>
                     <h1
-                      className={`text-sm text-slate-900 ${
+                      className={`text-xs text-slate-900 ${
                         item.attributes.stock <= 1
                           ? "bg-red-100"
                           : "bg-green-100"
@@ -281,7 +281,7 @@ const AllProduct = ({ brand, category }) => {
           ))}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
