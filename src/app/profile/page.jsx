@@ -1,12 +1,11 @@
 "use client";
 import { combineStore } from "@/utils/zustand/store";
 import React, { useEffect, useRef, useState } from "react";
-import Login from "../auth/login/page";
 import { successMessage } from "@/utils/notification";
 import { ToastContainer } from "react-toastify";
 
 const Profile = () => {
-  const { user, login } = combineStore();
+  const { login } = combineStore();
   const [dataUser, setDataUser] = useState();
   //   const [users, setDataUsers] = useState();
 

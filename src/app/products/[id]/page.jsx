@@ -2,12 +2,12 @@ import SingleProduct from "@/components/SingleProduct";
 
 const getProduct = async (id) => {
   const res = await fetch(
-    `http://localhost:1337/api/products/${id}?populate=image`,
+    `${process.env.NEXT_PUBLIC_API_URL}/products/${id}?populate=image`,
     {
       cache: "no-store",
-      headers: {
-        Authorization: "bearer " + process.env.NEXT_PUBLIC_API_TOKEN,
-      },
+      // headers: {
+      //   Authorization: "bearer " + process.env.NEXT_PUBLIC_API_TOKEN,
+      // },
     }
   );
 

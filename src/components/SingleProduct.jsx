@@ -46,7 +46,6 @@ const SingleProduct = ({ product }) => {
     }
   };
   // addToCart(qty);
-  console.log(products);
 
   useEffect(() => {
     combineStore.persist.rehydrate();
@@ -60,7 +59,7 @@ const SingleProduct = ({ product }) => {
     }
   }, [products]);
 
-  console.log(qtyProdIncart, product.data.attributes.stock);
+  // console.log(qtyProdIncart, product.data.attributes.stock);
   const handleQty = (type) => {
     setQty((prevQty) => {
       // console.log(prevQty, product.data.attributes.stock);
@@ -79,15 +78,14 @@ const SingleProduct = ({ product }) => {
     });
   };
 
+  console.log(product);
+
   return (
     <div className=" container mx-auto px-2 flex flex-col md:flex-row gap-2 overflow-hidden  ">
       <ToastContainer />
       <div className=" flex flex-1 relative justify-center rounded-lg overflow-hidden ">
         <Image
-          src={
-            process.env.NEXT_PUBLIC_API_IMAGE +
-            product.data.attributes.image.data.attributes.url
-          }
+          src={product.data.attributes.image.data[0].attributes.url}
           alt={product.data.attributes.title}
           width={500}
           height={500}

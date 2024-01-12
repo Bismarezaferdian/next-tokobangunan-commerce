@@ -47,7 +47,7 @@ function Login() {
       login(response.user);
       //get data cart
       const res2 = await fetch(
-        `http://localhost:1337/api/carts?populate=*&filters[users_permissions_users][id][$eq]=${response.user.id}`
+        `${process.env.NEXT_PUBLIC_API_URL}/carts?populate=*&filters[users_permissions_users][id][$eq]=${response.user.id}`
       );
       const dataCart = await res2.json();
       if (dataCart.data.length > 0) {

@@ -1,12 +1,15 @@
 import AllProduct from "@/components/AllProduct";
 
 const getDataBrand = async () => {
-  const res = await fetch("http://localhost:1337/api/brands?populate=*", {
-    cache: "no-store",
-    // headers: {
-    //   Authorization: "bearer " + process.env.NEXT_PUBLIC_API_TOKEN,
-    // },
-  });
+  const res = await fetch(
+    "https://tokobangunan-057n.onrender.com/api/brands?populate=*",
+    {
+      cache: "no-store",
+      // headers: {
+      //   Authorization: "bearer " + process.env.NEXT_PUBLIC_API_TOKEN,
+      // },
+    }
+  );
 
   if (!res.ok) {
     throw new Error("Failed!");
@@ -15,12 +18,15 @@ const getDataBrand = async () => {
   return res.json();
 };
 const getDataCategory = async () => {
-  const res = await fetch("http://localhost:1337/api/categories?populate=*", {
-    cache: "no-store",
-    headers: {
-      Authorization: "bearer " + process.env.NEXT_PUBLIC_API_TOKEN,
-    },
-  });
+  const res = await fetch(
+    "https://tokobangunan-057n.onrender.com/api/categories?populate=*",
+    {
+      cache: "no-store",
+      // headers: {
+      //   Authorization: "bearer " + process.env.NEXT_PUBLIC_API_TOKEN,
+      // },
+    }
+  );
 
   if (!res.ok) {
     throw new Error("Failed!");

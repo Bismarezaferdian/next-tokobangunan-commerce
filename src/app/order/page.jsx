@@ -4,10 +4,8 @@ import { formatRupiah } from "@/utils/formatMatauang";
 import { updateStok } from "@/utils/getData";
 import { successMessage } from "@/utils/notification";
 import { combineStore } from "@/utils/zustand/store";
-import { TruckIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import path from "path";
 import React, { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 

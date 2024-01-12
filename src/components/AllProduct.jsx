@@ -12,9 +12,9 @@ import { XCircleIcon } from "@heroicons/react/24/outline";
 
 const fetcher = (url) =>
   fetch(url, {
-    headers: {
-      Authorization: "bearer " + process.env.NEXT_PUBLIC_API_TOKEN,
-    },
+    // headers: {
+    //   Authorization: "bearer " + process.env.NEXT_PUBLIC_API_TOKEN,
+    // },
   }).then((res) => res.json());
 
 const AllProduct = ({ brand, category }) => {
@@ -32,6 +32,8 @@ const AllProduct = ({ brand, category }) => {
     }
   }, []);
 
+  // console.log(brand);
+
   //handle search from home page
   useEffect(() => {
     //cek jika ada brand dari params
@@ -47,9 +49,10 @@ const AllProduct = ({ brand, category }) => {
 
   // console.log(categoryFilter);
 
+  // brand.map((item) => console.log(item));
   //query mencari brand
   const queryBrand = brandFilter?.map(
-    (brand) => `filters[brands][title][$contains]=${brand}`
+    (brand) => `filters[brands][tilte][$contains]=${brand}`
   );
 
   //query mencari category
@@ -57,15 +60,16 @@ const AllProduct = ({ brand, category }) => {
     (cat) => `filters[categories][title][$contains]=${cat}`
   );
 
+  console.log(brandFilter);
+
   //fetching api dengan swr dengan query berdasarkan brand dan category input dari user
   const {
     data: products,
     error,
     isLoading,
   } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_PRODUCT}&${queryBrand.join(
-      "&"
-    )}&${queryCategory.join("&")}`,
+    `${process.env.NEXT_PUBLIC_API_PRODUCT}
+  &${queryBrand.join("&")}&${queryCategory.join("&")}`,
     fetcher
   );
 
@@ -171,21 +175,21 @@ const AllProduct = ({ brand, category }) => {
                 <input
                   type="checkbox"
                   name="brandFilter"
-                  id={item.attributes.title}
-                  checked={brandFilter.includes(item.attributes.title)}
-                  value={item.attributes.title}
+                  id={item.attributes.tilte}
+                  checked={brandFilter.includes(item.attributes.tilte)}
+                  value={item.attributes.tilte}
                   onChange={handleBrand}
                   className="w-4 h-4 text-blue-600 bg-gray-100 rounded-3xl focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
                 <label
-                  htmlFor={item.attributes.title}
+                  htmlFor={item.attributes.tilte}
                   className={`ml-2 text-sm font-medium text-gray-400 transition-all ${
-                    brandFilter.includes(item.attributes.title)
+                    brandFilter.includes(item.attributes.tilte)
                       ? "text-gray-700"
                       : ""
                   }  `}
                 >
-                  {item.attributes.title}
+                  {item.attributes.tilte}
                 </label>
               </div>
             ))}
@@ -227,19 +231,13 @@ const AllProduct = ({ brand, category }) => {
               <Link href={`/products/${item.id}`}>
                 <div className=" cursor-pointer">
                   <Image
-                    src={
-                      process.env.NEXT_PUBLIC_API_IMAGE +
-                      item.attributes.image.data.attributes.url
-                    }
+                    src={item.attributes.image.data[0].attributes.url}
                     alt={item.attributes.title}
                     width={200}
                     height={200}
                     priority={true}
                     placeholder="blur"
-                    blurDataURL={
-                      process.env.NEXT_PUBLIC_API_IMAGE +
-                      item.attributes.image.data.attributes.url
-                    }
+                    blurDataURL={item.attributes.image.data[0].attributes.url}
                     className="object-cover"
                   />
                 </div>

@@ -3,12 +3,15 @@ import ProductSlider from "./ProductSlider";
 import WrapLayout from "@/app/WrapLayout";
 
 const getData = async () => {
-  const res = await fetch("http://localhost:1337/api/products?populate=*", {
-    cache: "no-store",
-    headers: {
-      Authorization: "bearer " + process.env.NEXT_PUBLIC_API_TOKEN,
-    },
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/products?populate=*`,
+    {
+      cache: "no-store",
+      // headers: {
+      //   Authorization: "bearer " + process.env.NEXT_PUBLIC_API_TOKEN,
+      // },
+    }
+  );
 
   if (!res.ok) {
     throw new Error(Error);

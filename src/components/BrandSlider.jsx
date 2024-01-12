@@ -13,6 +13,7 @@ const BrandSlider = ({ data }) => {
     height: undefined,
   });
 
+  // console.log(data);
   useEffect(() => {
     function handleResize() {
       // Set window width/height to state
@@ -23,6 +24,12 @@ const BrandSlider = ({ data }) => {
     }
     handleResize();
   }, []);
+
+  const image = data.data.map((item) =>
+    console.log(item.attributes.img.data[0].attributes.url)
+  );
+
+  // image.map((item) => console.log(item[0].attributes.url));
 
   return (
     <div>
@@ -40,7 +47,7 @@ const BrandSlider = ({ data }) => {
             <Link
               href={{
                 pathname: "/products",
-                query: { brand: item.attributes.title },
+                query: { brand: item.attributes.tilte },
               }}
             >
               <motion.div
@@ -52,18 +59,18 @@ const BrandSlider = ({ data }) => {
                 className="py-10 flex gap-5 items-center justify-center "
               >
                 <Image
-                  src={
-                    process.env.NEXT_PUBLIC_API_IMAGE +
-                    item.attributes.img.data.attributes.url
-                  }
-                  alt={item.attributes.title}
+                  // default
+                  // src={
+                  //   process.env.NEXT_PUBLIC_API_IMAGE +
+                  //   item.attributes.img.data.attributes.url
+                  // }
+                  //use claudinary
+                  src={item.attributes.img.data[0].attributes.url}
+                  alt={item.attributes.tilte}
                   width={200}
                   height={200}
                   placeholder="blur"
-                  blurDataURL={
-                    process.env.NEXT_PUBLIC_API_IMAGE +
-                    item.attributes.img.data.attributes.url
-                  }
+                  blurDataURL={item.attributes.img.data[0].attributes.url}
                   className=" w-auto md:h-20 h-10  object-fill "
                 />
               </motion.div>

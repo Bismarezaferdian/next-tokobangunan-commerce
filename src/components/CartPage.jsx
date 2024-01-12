@@ -10,19 +10,29 @@ import useSWR from "swr";
 import { motion } from "framer-motion";
 import { formatRupiah } from "@/utils/formatMatauang";
 
-const fecher = ([url, param]) =>
-  fetch(`${url}${param}`).then((res) => res.json());
+// version1
+// const fecher = ([url, param]) =>
+//   fetch(`${url}${param}`).then((res) => res.json());
+const fecher = (url) => fetch(url).then((res) => res.json());
 
 function CartPage() {
   // const [hovered, setHovered] = useState(false);
   // const router = useRouter();
   const { products, qty, weight, totalPrice, user, updateCart, deleteCart } =
     combineStore();
-  const param = `?populate=*&filters[users_permissions_users][id][$eq]=${user.id}`;
+  // const param = `?populate=*&filters[users_permissions_users][id][$eq]=${userID}`;
   const { data, isLoading, error } = useSWR(
-    [process.env.NEXT_PUBLIC_API_CART, param],
+    [
+      `${process.env.NEXT_PUBLIC_API_CART}?populate=*&filters[users_permissions_users][id][$eq]=${user.id}`,
+    ],
     fecher
   );
+  // const { data, isLoading, error } = useSWR(
+  //   [process.env.NEXT_PUBLIC_API_CART+ param],
+  //   fecher
+  // );
+
+  console.log(data);
 
   useEffect(() => {
     if (data?.data.length > 0) {
@@ -59,10 +69,7 @@ function CartPage() {
           <div className="card-content flex gap-1 w-fit">
             <Image
               priority={true}
-              src={
-                process.env.NEXT_PUBLIC_API_IMAGE +
-                item?.image.data.attributes.url
-              }
+              src={item?.image.data[0].attributes.url}
               alt={item.title}
               width={150}
               height={150}
