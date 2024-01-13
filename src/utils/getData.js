@@ -29,7 +29,7 @@ export const getProvince = () => {
     data: province,
     isLoading,
     error,
-  } = useSWR(`http://localhost:3000/api/ongkir/province`, fecther);
+  } = useSWR(`https://megautama.netlify.app/api/ongkir/province`, fecther);
   return { province, isLoading, error };
 };
 export const getCity = (city_ID) => {
@@ -37,12 +37,15 @@ export const getCity = (city_ID) => {
     data: city,
     isLoading: cityLoading,
     error: cityError,
-  } = useSWR(`http://localhost:3000/api/ongkir/city?id=${city_ID}`, fecther);
+  } = useSWR(
+    `https://megautama.netlify.app/api/ongkir/city?id=${city_ID}`,
+    fecther
+  );
   return { city, cityLoading, cityError };
 };
 
 export const getCost = async (destination, weight, courier) => {
-  const res = await fetch("http://localhost:3000/api/ongkir/cost", {
+  const res = await fetch("https://megautama.netlify.app/api/ongkir/cost", {
     method: "POST",
     body: JSON.stringify({
       origin: "501",
