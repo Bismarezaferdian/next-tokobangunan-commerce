@@ -2,6 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import path from "path";
@@ -34,12 +35,18 @@ const BrandSlider = ({ data }) => {
   return (
     <div>
       <Swiper
-        loop={false}
         spaceBetween={5}
         // slidesPerView={2.5}
         slidesPerView={windowSize.width < 640 ? 2.5 : 3.5}
         // navigation={true}
-        // modules={[Navigation]}
+        reverseDirection={true}
+        // loop={true}
+        autoplay={{
+          delay: 1000,
+          disableOnInteraction: false,
+        }}
+        modules={[Autoplay]}
+        draggable={true}
         className="mySwiper"
       >
         {data?.data.map((item) => (

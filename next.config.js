@@ -21,6 +21,14 @@ const nextConfig = {
       },
     ];
   },
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: "https://tokobangunan-057n.onrender.com/:path*",
+      },
+    ];
+  },
   // pageExtensions: ["mdx", "md", "jsx", "js", "tsx", "ts"],
   images: {
     domains: [process.env.STRAPI_DOMAIN, "res.cloudinary.com"],

@@ -135,7 +135,9 @@ const AllProduct = ({ brand, category }) => {
           animate={filter ? "visible" : "hidden"}
           transition={{ type: "spring", bounce: 0.5 }}
           variants={variants}
-          className="absolute translate-x-full rounded-t-3xl md:rounded-none  md:relative md:grid bg-white shadow-xl md:shadow-none shadow-slate-600 col-span-1 w-full   p-4 z-50 "
+          className={`${
+            filter ? "absolute" : "hidden"
+          } translate-x-full rounded-t-3xl md:rounded-none  md:relative md:grid bg-white shadow-xl md:shadow-none shadow-slate-600 col-span-1 w-full   p-4 z-50 `}
         >
           <div className="flex md:hidden w-full justify-end ">
             <XCircleIcon className="h-6 w-6 text-gray-500" />
@@ -236,6 +238,7 @@ const AllProduct = ({ brand, category }) => {
                     width={200}
                     height={200}
                     priority={true}
+                    objectFit
                     placeholder="blur"
                     blurDataURL={item.attributes.image.data[0].attributes.url}
                     className="object-cover"
