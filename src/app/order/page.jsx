@@ -147,7 +147,7 @@ function Order({ searchParams }) {
   };
   // console.log(JSON.parse(select.cost));
 
-  // console.log(dataOrder);
+  console.log(dataOrder);
 
   return (
     <div className="container mx-auto">
