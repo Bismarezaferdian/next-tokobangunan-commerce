@@ -40,7 +40,7 @@ function Order({ searchParams }) {
         //jika tidak ada update data order dari cart
         setDataOrder((prev) => ({
           ...prev,
-          totalHarga: totalPrice,
+          totalHarga: combineStore.getState().totalPrice,
           //tidak bisa ambil dari combineStore karna reyhydrate
           product: combineStore.getState().products,
           users_permissions_users: combineStore.getState().user.id,
@@ -147,7 +147,7 @@ function Order({ searchParams }) {
   };
   // console.log(JSON.parse(select.cost));
 
-  console.log(dataOrder);
+  // console.log(dataOrder);
 
   return (
     <div className="container mx-auto">
