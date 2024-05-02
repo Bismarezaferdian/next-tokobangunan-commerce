@@ -23,7 +23,7 @@ const ProductSlider = ({ data }) => {
     handleResize();
   }, []);
 
-  console.log(data);
+  console.log("test run");
 
   return (
     <div>
@@ -45,7 +45,10 @@ const ProductSlider = ({ data }) => {
               <div className=" rounded-md text-center py-10">
                 <div className="flex  md:h-auto justify-center overflow-hidden rounded-md">
                   <Image
-                    src={item.attributes.image.data[0].attributes.url}
+                    src={
+                      process.env.NEXT_PUBLIC_API_IMAGE +
+                      item.attributes.image.data.attributes.url
+                    }
                     alt={item.attributes.title}
                     width={200}
                     height={200}

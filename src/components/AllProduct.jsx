@@ -6,7 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useRouter, useSearchParams } from "next/navigation";
 import { formatRupiah } from "@/utils/formatMatauang";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { calcLength, motion } from "framer-motion";
 import { AdjustmentsHorizontalIcon } from "@heroicons/react/24/solid";
 import { XCircleIcon } from "@heroicons/react/24/outline";
 
@@ -18,6 +18,7 @@ const fetcher = (url) =>
   }).then((res) => res.json());
 
 const AllProduct = ({ brand, category }) => {
+  console.log(brand);
   const searchParams = useSearchParams();
   const brandFromParams = searchParams.get("brand");
   const categoryFromParams = searchParams.get("category");
@@ -31,8 +32,6 @@ const AllProduct = ({ brand, category }) => {
       setFilter(true);
     }
   }, []);
-
-  // console.log(brand);
 
   //handle search from home page
   useEffect(() => {
@@ -177,7 +176,7 @@ const AllProduct = ({ brand, category }) => {
                 <input
                   type="checkbox"
                   name="brandFilter"
-                  id={item.attributes.tilte}
+                  id={item.attributes.title}
                   checked={brandFilter.includes(item.attributes.tilte)}
                   value={item.attributes.tilte}
                   onChange={handleBrand}
@@ -233,14 +232,22 @@ const AllProduct = ({ brand, category }) => {
               <Link href={`/products/${item.id}`}>
                 <div className=" cursor-pointer">
                   <Image
-                    src={item.attributes.image.data[0].attributes.url}
+                    // src={item.attributes.image.data[0].attributes.url}
+                    src={
+                      process.env.NEXT_PUBLIC_API_IMAGE +
+                      item.attributes.image.data.attributes.url
+                    }
                     alt={item.attributes.title}
                     width={200}
                     height={200}
                     priority={true}
-                    objectFit
+                    // objectFit
                     placeholder="blur"
-                    blurDataURL={item.attributes.image.data[0].attributes.url}
+                    // blurDataURL={item.attributes.image.data[0].attributes.url}
+                    blurDataURL={
+                      process.env.NEXT_PUBLIC_API_IMAGE +
+                      item.attributes.image.data.attributes.url
+                    }
                     className="object-cover"
                   />
                 </div>

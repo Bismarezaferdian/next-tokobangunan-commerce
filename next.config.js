@@ -26,6 +26,7 @@ const nextConfig = {
       {
         source: "/api/:path*",
         destination: "https://tokobangunan-057n.onrender.com/:path*",
+        // destination: "https://tokobangunan-057n.onrender.com/:path*",
       },
     ];
   },

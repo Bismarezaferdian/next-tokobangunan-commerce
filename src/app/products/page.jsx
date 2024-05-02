@@ -2,7 +2,8 @@ import AllProduct from "@/components/AllProduct";
 
 const getDataBrand = async () => {
   const res = await fetch(
-    "https://tokobangunan-057n.onrender.com/api/brands?populate=*",
+    `${process.env.NEXT_PUBLIC_API_URL}/brands?populate=*`,
+    // "https://tokobangunan-057n.onrender.com/api/brands?populate=*",
     {
       cache: "no-store",
       // headers: {
@@ -19,7 +20,9 @@ const getDataBrand = async () => {
 };
 const getDataCategory = async () => {
   const res = await fetch(
-    "https://tokobangunan-057n.onrender.com/api/categories?populate=*",
+    `${process.env.NEXT_PUBLIC_API_URL}/categories?populate=*`,
+
+    // "https://tokobangunan-057n.onrender.com/api/categories?populate=*",
     {
       cache: "no-store",
       // headers: {

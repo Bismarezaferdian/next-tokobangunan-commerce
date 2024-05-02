@@ -78,14 +78,18 @@ const SingleProduct = ({ product }) => {
     });
   };
 
-  console.log(product);
+  console.log(product.data);
 
   return (
     <div className=" container mx-auto px-2 flex flex-col md:flex-row gap-2 overflow-hidden  ">
       <ToastContainer />
       <div className=" flex flex-1 relative justify-center rounded-lg overflow-hidden ">
         <Image
-          src={product.data.attributes.image.data[0].attributes.url}
+          // src={product.data.attributes.image.data[0].attributes.url}
+          src={
+            process.env.NEXT_PUBLIC_API_IMAGE +
+            product.data.attributes.image.data.attributes.url
+          }
           alt={product.data.attributes.title}
           width={500}
           height={500}

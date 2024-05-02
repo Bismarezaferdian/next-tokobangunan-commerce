@@ -17,12 +17,15 @@ const getData = async () => {
   if (!res.ok) {
     throw new Error("Failed!");
   }
+  console.log(res);
 
   return res.json();
 };
 
 const Brand = async () => {
   const data = await getData();
+
+  //   console.log(data);
 
   return (
     <WrapLayout>
@@ -32,7 +35,7 @@ const Brand = async () => {
             Brand pilihan
           </h1>
         </div>
-        <BrandSlinder data={data} />
+        <BrandSlinder />
       </div>
     </WrapLayout>
   );

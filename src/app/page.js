@@ -9,13 +9,13 @@ import Hero from "@/components/Hero";
 export default async function Home() {
   return (
     <div>
-      <Hero />
+      {/* <Hero /> */}
       <div className="container px-2 mx-auto overflow-hidden backdrop-opacity-20 ">
         <div>
           <Category />
           <Brand />
           <BannerDisplay />
-          <ProductDisplay />
+          {/* <ProductDisplay /> */}
           <ImgDisplay />
           <About />
         </div>

@@ -125,3 +125,12 @@ export const getCategory = () => {
 
   return { category, categoryError, categoryLoading };
 };
+
+export const getBrands = () => {
+  const {
+    data: brands,
+    error: brandsError,
+    isLoading: brandsLoading,
+  } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/brands?populate=*`, fecther);
+  return { brands, brandsError, brandsLoading };
+};
